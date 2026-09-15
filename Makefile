@@ -1,31 +1,49 @@
 CC       ?= cc
+AR       ?= ar
 CFLAGS   ?= -std=c11 -O2 -Wall -Wextra -Wpedantic
 CPPFLAGS += -Iinclude -Ithird_party/libtakum
 LDLIBS   += -lm
 
 BUILD    := build
 LIBTAKUM := third_party/libtakum/libtakum.a
-SRC      := src/zt_version.c
-OBJ      := $(patsubst src/%.c,$(BUILD)/%.o,$(SRC))
-SMOKE    := $(BUILD)/smoke
+LIB      := $(BUILD)/libzvtakum.a
 
-all: $(SMOKE)
+SRC      := $(wildcard src/*.c)
+OBJ      := $(patsubst src/%.c,$(BUILD)/src/%.o,$(SRC))
+TESTSRC  := $(wildcard tests/*.c)
+TESTBIN  := $(patsubst tests/%.c,$(BUILD)/tests/%,$(TESTSRC))
+TOOLSRC  := $(wildcard tools/*.c)
+TOOLBIN  := $(patsubst tools/%.c,$(BUILD)/tools/%,$(TOOLSRC))
+
+all: $(LIB) $(TESTBIN) $(TOOLBIN)
 
 third_party: $(LIBTAKUM)
 
 $(LIBTAKUM):
 	cd third_party/libtakum && ./configure && $(MAKE) libtakum.a
 
-$(BUILD)/%.o: src/%.c
+$(BUILD)/src/%.o: src/%.c
 	@mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $@ $<
 
-$(SMOKE): tests/smoke.c $(OBJ) $(LIBTAKUM)
+$(LIB): $(OBJ)
 	@mkdir -p $(@D)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ tests/smoke.c $(OBJ) $(LIBTAKUM) $(LDLIBS)
+	$(AR) rcs $@ $(OBJ)
+
+$(BUILD)/tests/%: tests/%.c $(LIB) $(LIBTAKUM)
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $< $(LIB) $(LIBTAKUM) $(LDLIBS)
+
+$(BUILD)/tools/%: tools/%.c $(LIB) $(LIBTAKUM)
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $< $(LIB) $(LIBTAKUM) $(LDLIBS)
 
 test: all
-	$(SMOKE)
+	@for t in $(TESTBIN); do \
+		echo "== $$t"; \
+		$$t || exit 1; \
+	done
+	@echo "todos os testes passaram"
 
 clean:
 	rm -rf $(BUILD)

@@ -101,6 +101,29 @@ no PDF antes de virarem vetores golden).
   `docs`, `paper`.
 - Licenca do projeto: ISC (compativel com libtakum/libposit).
 
+### D7 - Dominio de arredondamento do takum linear (2026-09-15)
+
+- Achado do F1: o libtakum arredonda takum **linear** no dominio
+  logaritmico (Algoritmo 1 adaptado a base 2), com empates para cima na
+  ordem de bit string. Ex.: `2^-239 * 2^8 = 2^-231`, ponto medio geometrico
+  entre `2^-239` e `2^-223`, arredonda para `2^-223` (empate para cima),
+  nao para o vizinho mais proximo em valor.
+- Decisao: adotar o comportamento do libtakum como referencia normativa do
+  ISA (documentado em `docs/spec/zvtakum.adoc`). O limite de erro dos testes
+  usa a distancia aos vizinhos representaveis (`neighbor_bound`), valido
+  para qualquer regra monotona, em vez de `epsilon(p)` no dominio linear.
+- Consequencia para o artigo: o erro relativo do takum linear em regioes de
+  p <= 0 (expoentes extremos de T8) pode chegar a ~100% (ex.: fator 256 de
+  espacamento entre representaveis), o que deve ser discutido nos resultados.
+
+### D8 - RNE vs Algoritmo 1 (2026-09-15)
+
+- RNE (libtakum) permanece normativo; `zt_round_algo1` implementa o
+  Algoritmo 1 do artigo para fidelidade. Medicao: 0 divergencias em 200.000
+  amostras aleatorias por variante/tamanho (empates exatos nao amostrados).
+- As porcentagens de fechamento da Secao 5.6 do paper continuam tratadas
+  como ancoras aproximadas.
+
 ## Riscos e pontos abertos
 
 - **Arredondamento**: ver D2; quantificar divergencia e documentar no artigo.

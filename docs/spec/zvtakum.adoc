@@ -1,0 +1,124 @@
+= Zvtakum: extensão de aritmética Takum para RVV (proposta)
+:toc: left
+:toclevels: 3
+
+NOTE: Documento interno do projeto (Projeto Integrador AOC/UFMG). Não é uma
+especificação ratificada pela RISC-V International. Nomes de extensão e
+mnemônicos são provisórios.
+
+== Introdução
+
+Este documento especifica o formato numérico *takum* (arXiv:2404.18603 e
+arXiv:2503.14067) para uso vetorial no RISC-V, e a extensão de instruções
+*Zvtakum* proposta para o projeto. A referência de software é a biblioteca
+`libtakum` v2.0.0 (ISC), fixada em `third_party/libtakum`.
+
+Duas variantes do formato são suportadas:
+
+* *linear* (Definição 8 do artigo): significando linear em base 2;
+* *logarítmica* (Definição 2 do artigo, variante padrão): significando
+  logarítmico em base stem:[sqrt(e)].
+
+O padrão deste projeto é a variante logarítmica; a variante linear é a usada
+no benchmark de viabilidade do artigo AVX10.2 (MuFoLAB usava `LinearTakum8/16/32`).
+
+== Layout do formato
+
+Um takum de stem:[n] bits é uma cadeia MSB->LSB stem:[(S, D, R, C, F)]:
+
+[source]
+----
+MSB                                                        LSB
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+| S | D |     R     |            C            |      F      |
++---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+  1   1       3                     r                 p
+----
+
+Campos (com stem:[n >= 12]; para stem:[n < 12], ver "Ghost bits"):
+
+* stem:[S in {0,1}]: bit de sinal.
+* stem:[D in {0,1}]: bit de direção.
+* stem:[R = (R_2, R_1, R_0)]: bits de regime.
+* stem:[r]: regime, stem:[r = D ? "UI"(R) : 7 - "UI"(R)] em stem:[0..7].
+* stem:[C]: stem:[r] bits de característica.
+* stem:[c]: característica,
+  stem:[c = D ? (2^r - 1 + sum C_i 2^i) : (-2^(r+1) + 1 + sum C_i 2^i)].
+* stem:[p = n - r - 5]: quantidade de bits de fração/mantissa.
+* stem:[F]: stem:[p] bits; stem:[f = 2^{-p} sum F_i 2^i] em stem:[0,1).
+
+.Os três tamanhos de elemento suportados e seus extremos representáveis.
+[cols="1,1,1,1,1,1",options="header"]
+|====
+| Variante | Tamanho | p (faixa) | Menor positivo | Maior positivo | Faixa dinâmica
+| linear | T8  | -4..3  | 1.131959885e-72 | 8.834235324e+71 | ~7.8e143
+| linear | T16 | 4..11  | 1.835185818e-77 | 5.608679322e+76 | ~3.1e153
+| linear | T32 | 20..27 | 1.727235358e-77 | 5.789601701e+76 | ~3.4e153
+| log    | T8  | -4..3  | 1.264181448e-52 | 7.910256886e+51 | ~6.3e103
+| log    | T16 | 4..11  | 4.375475535e-56 | 2.285465870e+55 | ~5.2e110
+| log    | T32 | 20..27 | 4.240858328e-56 | 2.358013220e+55 | ~5.6e110
+|====
+
+NOTA: A faixa dinâmica de T16/T32 já satura no valor máximo do formato
+(stem:[2^+-255] linear, stem:[sqrt(e)^+-255] log); T8 tem faixa reduzida
+(stem:[2^+-239] linear, stem:[e^+-119.5] log) por causa dos bits fantasma.
+Os valores da tabela são gerados por `build/tools/zt-format`.
+
+=== Valor representado
+
+* zero: todos os bits em 0 (stem:[S=0] e stem:[D=R=C=F=0]);
+* NaR (Not a Real): stem:[S=1] e stem:[D=R=C=F=0] (padrão de bits
+  `100..0` = 0x80/0x8000/0x80000000, igual ao menor inteiro em complemento
+  de dois);
+* variante linear:
+  stem:[e = (-1)^S (c + S)] em stem:[-255..254],
+  stem:[v = [(1 - 3S) + f] 2^e];
+* variante logarítmica: stem:[l = (-1)^S (c + f)] em stem:[(-255, 255)],
+  stem:[v = (-1)^S sqrt(e)^l].
+
+NaR compara igual a si mesmo e é menor que qualquer outro takum (ordem total
+em complemento de dois). Não há infinito; a saturação representa o overflow.
+
+=== Ghost bits (n < 12)
+
+Cadeias menores que 12 bits são decodificadas assumindo zero nos bits
+faltantes do lado menos significativo (extensão à esquerda na cadeia):
+stem:[E = "bits" << (12 - n)]. O decodificador de 12 bits processa todos os
+tamanhos; os bits stem:[C] que não cabem em stem:[n] bits são zeros
+fantasma. Consequência: para T8, stem:[p] pode ser negativo (sem bits de
+mantissa).
+
+== Arredondamento e saturação
+
+A aritmética é *saturante*: valores fora da faixa são presos ao menor/maior
+representável (com o sinal), sem overflow/underflow para infinito nem zero
+silencioso. NaR propaga por todas as operações.
+
+Dois modos de arredondamento são definidos:
+
+* *RNE* (padrão do projeto): arredonda para o representável mais próximo;
+  empates para o valor de mantissa par. É o comportamento do `libtakum`
+  v2.0.0 e o modo normativo do ISA proposto.
+* *Algoritmo 1* (fidelidade ao artigo): trunca a cadeia em stem:[n+1] bits,
+  arredonda pelo bit de guarda (empates para cima na ordem de bit string) e
+  corrige under/overflow. Implementado em `zt_round_algo1`.
+
+Medição do projeto: em 200.000 amostras aleatórias por variante/tamanho não
+se observou divergência entre RNE e o Algoritmo 1 (empates exatos são raros
+e não foram exercitados nas amostras).
+
+== Decodificador de 12 bits comum
+
+Todo takum, independentemente de stem:[n], é decodificado a partir dos no
+máximo 12 bits mais significativos: os campos stem:[S, D, R] e os bits de
+stem:[C] cabem sempre em 11 bits (stem:[1+1+3+7=12]) e os bits restantes são
+sempre de mantissa/fração. Essa é a base do argumento de hardware do artigo
+(decodificador compartilhado por todas as precisões).
+
+== Estado
+
+* F1 (concluído): codec (decode/encode, ghost bits, campos), ALU
+  (add/sub/mul/div/sqrt/abs/neg), dois modos de arredondamento, testes
+  exaustivos T8 e propriedades formais.
+* F2 (próximo): instruções `vtadd.vv`, `vtsub.vv`, `vtmul.vv`, `vtdot.vv`,
+  `vncvt.t.t`, encodings e semântica vetorial.

@@ -33,7 +33,10 @@ make test          # testes
 
 ## Estado
 
-F0 (setup) - esqueleto do repositorio, libtakum pinado em v2.0.0, teste smoke.
+F1 concluido - codec T8/T16/T32 (variantes linear e logaritmica), ALU
+(add/sub/mul/div/sqrt/abs/neg), dois modos de arredondamento (RNE normativo
+e Algoritmo 1 do artigo), testes exaustivos T8 e propriedades formais.
+Ver `docs/spec/zvtakum.adoc` e `docs/devlog.md`.
 
 ## Licenca
 
