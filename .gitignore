@@ -1,0 +1,17 @@
+/build/
+*.o
+*.a
+*.so
+*.so.*
+bench/matrices/*.mtx
+bench/matrices/*.mtx.gz
+bench/results/*
+!bench/results/.gitkeep
+paper/build/
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.pdf
+.venv/
+__pycache__/
+*.pyc

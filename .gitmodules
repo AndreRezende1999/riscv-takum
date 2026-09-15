@@ -1,0 +1,4 @@
+[submodule "third_party/libtakum"]
+	path = third_party/libtakum
+	url = https://github.com/takum-arithmetic/libtakum
+	ignore = dirty
