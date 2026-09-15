@@ -102,3 +102,42 @@ make test
   acumulacao alargada do `vtdot` (T8->T16, T16->T32, T32->T64), estreitamento
   do `vncvt` e secao de excecoes/CSRs.
 
+## 2026-09-15 - F3: simulador funcional RVV + Zvtakum
+
+Implementado:
+
+- `include/zvtakum/rvv.h` + `src/rvv_state.c`: estado (32 vregs, vtype com
+  SEW/LMUL/vta/vma, vl, vstart, x0-x31, memoria de 1 MiB), acesso a
+  elementos (tambem em largura alargada para o vtdot), `vsetvli` com regras
+  de x0/AVL e codificadores de instrucoes.
+- `src/rvv_insns.c`: dispatch por opcode/funct6/funct3/bit25 e semantica de
+  vsetvl*, vle/vse (8/16/32), vfadd/vfmul (vv/vf), vfredusum, vrgather.vv,
+  vmv.v.v, vmv.v.i, vfmv.v.f e das Zvtakum (vtadd, vtsub, vtmul, vtdot,
+  vncvt). Mascara/tail: vta/vma=1 preenche com 1s, 0 deixa undisturbed.
+  Contadores: instrucoes (total/RVV/Zvtakum), CSR writes, elementos.
+- `src/zt_asm.c` + `include/zvtakum/asm.h`: assembler e disassembler do
+  subconjunto, incluindo vtype simbolico (e8/e16/e32, m1..m8, ta/tu, ma/mu),
+  registradores ABI e sufixo v0.t.
+- `tools/zt-disa.c`, `tools/zt-run.c` (opcoes --variant/--vlen/--x/--init8),
+  `examples/axpy.zt`, `examples/takum_dot.zt`, alvo `make demo`.
+- Testes:
+  - `tests/test_rvv.c`: vsetvli/vsetivli, load/store, mascara/tail,
+    vfadd/vfmul/vfredusum, vrgather, vmv/vfmv.
+  - `tests/test_zvtakum_isa.c`: 200 trials x 32 elementos de vtadd/vtsub/
+    vtmul comparados com a ALU escalar (bit-exato), vncvt T32->T16, vtdot
+    T8->T16 com acumulador inicial, mascaramento.
+  - `tests/test_sim.c`: round-trip assembler/disassembler (16 programas),
+    programa axpy f32 completo e programa takum (load + vtadd + vtmul +
+    vtdot + store) nas duas variantes, com contadores verificados.
+- Achados: `vmv.v.v`/`vfmv.v.f`/`vmv.v.i` usam bit 25 fixo em 1 (funct6
+  0x17), separando de `vmerge` (bit 25 = vm); o disassembler passou a
+  imprimir vtype simbolico para permitir round-trip.
+
+Comandos:
+
+```sh
+make -j4 all
+make test
+make demo
+```
+

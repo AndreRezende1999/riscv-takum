@@ -43,6 +43,8 @@ typedef struct {
 
 uint64_t   zt_width_mask(uint32_t width);
 uint64_t   zt_nar_bits(uint32_t width);
+uint64_t   zt_convert(zt_variant variant, uint32_t from_width,
+                      uint32_t to_width, uint64_t bits);
 int        zt_is_nar(zt_variant variant, uint32_t width, uint64_t bits);
 int        zt_is_zero(zt_variant variant, uint32_t width, uint64_t bits);
 void       zt_decode(zt_variant variant, uint32_t width, uint64_t bits,

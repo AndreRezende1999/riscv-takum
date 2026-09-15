@@ -164,6 +164,36 @@ sempre saturante, NaR é um valor (não uma exceção) e o arredondamento é RNE
 fixo. `vstart` preserva a semântica de retomada da RVV; operações mascaradas
 e o tratamento de tail seguem `vta`/`vma`.
 
+== Simulador funcional
+
+Implementado em C11 (`src/rvv_state.c`, `src/rvv_insns.c`), sem dependências
+além do `libtakum`:
+
+* estado: 32 registradores vetoriais, `vtype` (SEW 8/16/32, LMUL 1/2/4/8,
+  `vta`/`vma`), `vl`, `vstart`, registradores escalares (endereços e `rd`),
+  memória plana de 1 MiB; `VLEN` configurável (padrão 256 bits);
+* políticas de máscara/tail: `vta`/`vma` = 0 (undisturbed) ou 1 (agnóstico,
+  preenchido com 1s); máscara em `v0`;
+* instruções RVV suportadas (subconjunto para os kernels):
+  `vsetvli`/`vsetivli`/`vsetvl`, `vle8/16/32.v`, `vse8/16/32.v`,
+  `vfadd.vv`/`vfadd.vf`, `vfmul.vv`/`vfmul.vf` (f32),
+  `vfredusum.vs` (f32), `vrgather.vv`, `vmv.v.v`, `vmv.v.i`,
+  `vfmv.v.f`;
+* instruções Zvtakum: `vtadd.vv`, `vtsub.vv`, `vtmul.vv`, `vtdot.vv`,
+  `vncvt.t.t`;
+* contadores: total de instruções, RVV, Zvtakum, escritas de CSR
+  (`vtype`/`vl`) e elementos ativos processados; `trace` opcional.
+
+Ferramentas: `build/tools/zt-disa` (encode/decode de instruções) e
+`build/tools/zt-run` (monta e executa arquivos `.zt`, com opções
+`--variant`, `--vlen`, `--x N=V`, `--init8`). Exemplos em `examples/` e
+`make demo`.
+
+Limitações desta versão: LMUL fracionário não suportado; operações f16/f64
+da RVV de base não implementadas (o foco é f32 para comparação IEEE e
+T8/T16/T32 para takum); gathers com índice de 16 bits
+(`vrgatherei16.vv`) não implementados; apenas acesso unit-stride.
+
 == Estado
 
 * F1 (concluído): codec (decode/encode, ghost bits, campos), ALU
@@ -172,4 +202,7 @@ e o tratamento de tail seguem `vta`/`vma`.
 * F2 (concluído): instruções `vtadd.vv`, `vtsub.vv`, `vtmul.vv`,
   `vtdot.vv`, `vncvt.t.t` especificadas, encodings provisórios e
   reestruturação RVV em `docs/rvv-restructuring.md`.
-* F3 (próximo): simulador funcional RVV + Zvtakum.
+* F3 (concluído): simulador funcional RVV+Zvtakum, assembler/disassembler,
+  ferramentas `zt-disa`/`zt-run`, exemplos e testes de máscara/tail,
+  instruções e programas completos.
+* F4 (próximo): benchmarks (viabilidade com matrizes, SpMV, fechamento).

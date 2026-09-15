@@ -1,0 +1,9 @@
+# Produto escalar Takum (T8): v4[0] = sum(v1[i] * v2[i])
+# Registradores: x10 = n, x20 = &a, x21 = &b, x22 = &soma (vtadd)
+# Uso: build/tools/zt-run --variant log --x 10=8 --x 20=0 --x 21=64 --x 22=128 examples/takum_dot.zt
+vsetvli x1, x10, e8, m1, ta, ma
+vle8.v v1, (x20)
+vle8.v v2, (x21)
+vtadd.vv v3, v1, v2
+vtdot.vv v4, v1, v2
+vse8.v v3, (x22)

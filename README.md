@@ -13,12 +13,14 @@ Replica a metodologia de:
 ## Conteudo
 
 - `include/`, `src/` - codec/ALU Takum (T8/T16/T32), variantes linear (Def. 8)
-  e logaritmica (Def. 2)
-- `src/` - simulador funcional RVV + extensao proposta `Zvtakum`
+  e logaritmica (Def. 2); simulador funcional RVV + Zvtakum
   (`vtadd`, `vtsub`, `vtmul`, `vtdot`, `vncvt`)
+- `tools/` - `zt-disa` (encode/decode de instrucoes), `zt-run` (executa `.zt`)
+- `examples/` - programas de exemplo (`axpy.zt`, `takum_dot.zt`)
 - `tests/` - testes unitarios, testes de propriedades e vetores golden
 - `bench/` - benchmark de viabilidade (matrizes esparsas) e SpMV
-- `docs/` - decisoes de projeto, especificacao e tabelas de reestruturacao do ISA
+- `docs/` - decisoes de projeto, especificacao, tabelas de reestruturacao
+  do ISA e devlog
 - `paper/` - artigo em formato IEEE (LaTeX)
 
 ## Build
@@ -29,14 +31,15 @@ Dependencias: C11 (`cc`), GNU make e o submodule `third_party/libtakum` (ISC).
 git submodule update --init --recursive
 make third_party   # compila libtakum (pinada em v2.0.0)
 make test          # testes
+make demo          # exemplos com zt-disa/zt-run
 ```
 
 ## Estado
 
-F2 concluido - alem do codec/ALU (F1), a especificacao Zvtakum
-(`vtadd.vv`, `vtsub.vv`, `vtmul.vv`, `vtdot.vv`, `vncvt.t.t`), os encodings
-provisorios e a reestruturacao RVV com tabelas "original -> proposta".
-Ver `docs/spec/zvtakum.adoc`, `docs/rvv-restructuring.md` e `docs/devlog.md`.
+F3 concluido - codec/ALU, especificacao Zvtakum, encodings, reestruturacao
+RVV e simulador funcional (RVV subconjunto + Zvtakum) com contadores de
+instrucao/CSR. Ver `docs/spec/zvtakum.adoc`, `docs/rvv-restructuring.md` e
+`docs/devlog.md`.
 
 ## Licenca
 

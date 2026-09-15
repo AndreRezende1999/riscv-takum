@@ -32,6 +32,52 @@ zt_is_zero(zt_variant variant, uint32_t width, uint64_t bits)
 	return (bits & zt_width_mask(width)) == 0;
 }
 
+uint64_t
+zt_convert(zt_variant variant, uint32_t from_width, uint32_t to_width,
+           uint64_t bits)
+{
+	uint64_t b = bits & zt_width_mask(from_width);
+
+#define ZT_CONV_LINEAR(FW, TW)                                            \
+	do {                                                              \
+		if (from_width == (FW) && to_width == (TW))               \
+			return (uint##TW##_t)takum##TW##_from_takum##FW(  \
+			    (takum##FW)(uint##FW##_t)b);                  \
+	} while (0)
+
+#define ZT_CONV_LOG(FW, TW)                                                \
+	do {                                                               \
+		if (from_width == (FW) && to_width == (TW))                \
+			return (uint##TW##_t)                              \
+			    takum_log##TW##_from_takum_log##FW(            \
+			        (takum_log##FW)(uint##FW##_t)b);           \
+	} while (0)
+
+	if (from_width == to_width)
+		return b;
+
+	if (variant == ZT_VARIANT_LOG) {
+		ZT_CONV_LOG(8, 16);
+		ZT_CONV_LOG(8, 32);
+		ZT_CONV_LOG(16, 8);
+		ZT_CONV_LOG(16, 32);
+		ZT_CONV_LOG(32, 8);
+		ZT_CONV_LOG(32, 16);
+	} else {
+		ZT_CONV_LINEAR(8, 16);
+		ZT_CONV_LINEAR(8, 32);
+		ZT_CONV_LINEAR(16, 8);
+		ZT_CONV_LINEAR(16, 32);
+		ZT_CONV_LINEAR(32, 8);
+		ZT_CONV_LINEAR(32, 16);
+	}
+
+#undef ZT_CONV_LINEAR
+#undef ZT_CONV_LOG
+
+	return b;
+}
+
 int
 zt_is_nar(zt_variant variant, uint32_t width, uint64_t bits)
 {

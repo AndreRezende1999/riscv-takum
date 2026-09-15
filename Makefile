@@ -45,10 +45,24 @@ test: all
 	done
 	@echo "todos os testes passaram"
 
+demo: all
+	@echo "== zt-disa (encode/decode)"
+	$(BUILD)/tools/zt-disa encode "vtadd.vv v1, v2, v3"
+	$(BUILD)/tools/zt-disa decode 0xe62190d7
+	@echo "== axpy IEEE f32"
+	$(BUILD)/tools/zt-run --x 10=8 --x 20=0 --x 21=64 --x 23=1056964608 \
+		--init8 examples/axpy.zt
+	@echo "== produto escalar Takum (log)"
+	$(BUILD)/tools/zt-run --variant log --x 10=8 --x 20=0 --x 21=64 \
+		--x 22=128 --init8 examples/takum_dot.zt
+	@echo "== produto escalar Takum (linear)"
+	$(BUILD)/tools/zt-run --variant linear --x 10=8 --x 20=0 --x 21=64 \
+		--x 22=128 --init8 examples/takum_dot.zt
+
 clean:
 	rm -rf $(BUILD)
 
 distclean: clean
 	cd third_party/libtakum && $(MAKE) clean
 
-.PHONY: all test third_party clean distclean
+.PHONY: all test third_party demo clean distclean

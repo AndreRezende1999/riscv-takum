@@ -141,6 +141,24 @@ no PDF antes de virarem vetores golden).
   conversoes = 21), bf16 = 4 (Zvfbfmin/Zvfbfwma), crypto = 41; nao ha
   FP8 em RVV. Tabelas de reestruturacao em `docs/rvv-restructuring.md`.
 
+### D10 - Simulador funcional (2026-09-15)
+
+- Simulador em C11 proprio (sem Spike/QEMU): VLEN configuravel (padrao 256
+  bits), LMUL 1/2/4/8, SEW 8/16/32, `vta`/`vma` 0 = undisturbed e 1 =
+  agnostico preenchido com 1s (escolha per; RVV permite qualquer valor).
+- Subconjunto RVV suficiente para os kernels: vsetvl*, vle/vse (8/16/32,
+  unit-stride), vfadd/vfmul (vv/vf, f32), vfredusum (f32), vrgather.vv,
+  vmv.v.v, vmv.v.i, vfmv.v.f.
+- `vtdot.vv` acumula em `vd[0]` (EEW = 2*SEW): le o acumulador inicial de
+  vd[0], soma os produtos alargados (T8->T16, T16->T32, T32->T64) e escreve
+  de volta. Isso permite usar a instrucao em laco de segmentos de linha
+  (SpMV) sem instrucoes extras de reduction.
+- Contadores: instrucoes (total/RVV/Zvtakum), escritas de CSR (vtype/vl) e
+  elementos ativos; trace opcional de palavras executadas.
+- Ferramentas: `zt-disa` (encode/decode) e `zt-run` (.zt), assembler proprio
+  aceita nomes ABI de registradores (a0..a7/t0..t6), tokens de vtype
+  (e8/e16/e32, m1/m2/m4/m8, ta/ma) e sufixo `v0.t` para mascaramento.
+
 ## Riscos e pontos abertos
 
 - **Arredondamento**: ver D2; quantificar divergencia e documentar no artigo.
