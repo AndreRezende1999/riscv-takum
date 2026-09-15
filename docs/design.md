@@ -177,6 +177,28 @@ no PDF antes de virarem vetores golden).
   `--allow-multiple-definition` (simbolos `util_round_*` duplicados entre
   as duas bibliotecas, codigo identico).
 
+### D12 - Fechamento e SpMV (2026-09-15)
+
+- Fechamento (Secao 5.6 do artigo): T8 exaustivo (faixa da posit8,
+  [2^-24, 2^24], 73/81 valores positivos) e T16 amostrado com 2.000.000 de
+  pares por operacao (faixa da posit16, [2^-56, 2^56], ~25.500 valores);
+  exaustivo seria ~1e9 pares. Exatidao testada com tolerancia relativa de
+  1e-15 (ruido do long double em exp/log) e soma/subtracao com operando
+  menor abaixo de 2e-15 do maior sao descartadas (nao verificaveis e
+  matematicamente inexatas). Resultados (log): T8 add 0.0%, mul 41.2%,
+  inv 100%, sqrt 60.5%; T16 add 0.0%, mul 36.7%, div 36.8%, inv 100%,
+  sqrt 84.2% - aderentes ao artigo (40.3%, 36.6%, 84.1%).
+- SpMV: VLEN=1024, LMUL=1, matrizes pequenas (n <= 32) porque o
+  `vrgather` valida indices contra VLMAX; kernel Takum = vle + gather +
+  `vtdot` (com acumulador em `vd[0]`, strip-mining) + `vncvt` + vse;
+  kernel f32 = vle + gather + `vfmul` + `vfredusum`; referencia em long
+  double sobre entradas ja arredondadas ao formato. Resultados:
+  T32 ~1e-9 (melhor que f32 ~5e-8 no caso aleatorio), T16 ~1e-4,
+  T8 ~3-6e-2; contadores de instrucoes/CSR/CSV por formato.
+- Correcoes necessarias no caminho: `zt_convert` e o dispatch da ALU
+  precisavam cobrir 64 bits (acumulador do `vtdot` com SEW=32);
+  `vrgather.vv` generalizado para SEW 8/16/32.
+
 ## Riscos e pontos abertos
 
 - **Arredondamento**: ver D2; quantificar divergencia e documentar no artigo.

@@ -59,17 +59,29 @@ zt_convert(zt_variant variant, uint32_t from_width, uint32_t to_width,
 	if (variant == ZT_VARIANT_LOG) {
 		ZT_CONV_LOG(8, 16);
 		ZT_CONV_LOG(8, 32);
+		ZT_CONV_LOG(8, 64);
 		ZT_CONV_LOG(16, 8);
 		ZT_CONV_LOG(16, 32);
+		ZT_CONV_LOG(16, 64);
 		ZT_CONV_LOG(32, 8);
 		ZT_CONV_LOG(32, 16);
+		ZT_CONV_LOG(32, 64);
+		ZT_CONV_LOG(64, 8);
+		ZT_CONV_LOG(64, 16);
+		ZT_CONV_LOG(64, 32);
 	} else {
 		ZT_CONV_LINEAR(8, 16);
 		ZT_CONV_LINEAR(8, 32);
+		ZT_CONV_LINEAR(8, 64);
 		ZT_CONV_LINEAR(16, 8);
 		ZT_CONV_LINEAR(16, 32);
+		ZT_CONV_LINEAR(16, 64);
 		ZT_CONV_LINEAR(32, 8);
 		ZT_CONV_LINEAR(32, 16);
+		ZT_CONV_LINEAR(32, 64);
+		ZT_CONV_LINEAR(64, 8);
+		ZT_CONV_LINEAR(64, 16);
+		ZT_CONV_LINEAR(64, 32);
 	}
 
 #undef ZT_CONV_LINEAR

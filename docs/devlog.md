@@ -174,3 +174,28 @@ make demo
 - `make bench` executa coleta -> conversao -> analise; CSVs/figuras
   versionados em `bench/results`.
 
+## 2026-09-15 - F4b: fechamento aritmetico + SpMV
+
+- `bench/closure.c`: T8 exaustivo e T16 com 2M de pares amostrados na
+  faixa da posit correspondente; exatidao com tolerancia 1e-15 e descarte
+  de soma/subtracao nao verificavel (operando menor < 2e-15 do maior).
+  Resultados em `bench/results/closure.csv`/`closure_summary.txt`:
+  log T8 add 0.00%, sub 2.44%, mul 41.17%, div 41.17%, inv 100%,
+  sqrt 60.49%; log T16 add 0.00%, mul 36.74%, div 36.75%, inv 100%,
+  sqrt 84.20%, square 100%. Comparacao com o artigo (T8 mul 40.3%,
+  inv 100%, sqrt 58.8%; T16 mul 36.6%, div 36.7%, sqrt 84.1%): aderente.
+- `bench/spmv.c`: kernels vrgather + vtdot (Takum) e vrgather + vfmul +
+  vfredusum (f32), referencias em long double com entradas arredondadas,
+  contadores de instrucao/CSR/elementos; VLEN=1024, matrizes lap2d (n=25)
+  e aleatoria (n=32, 6 nnz/linha). Resultados em
+  `bench/results/spmv.csv`/`spmv_summary.txt`: erro relativo 2-norma de y:
+  T32 ~1e-9 (linear e log), T16 ~1e-4, T8 ~3-6e-2, f32 ~5e-8 (caso
+  aleatorio). Contagem de instrucoes: kernel Takum ~193 (129 RVV + 64
+  Zvtakum) contra ~161 do f32 no mesmo caso.
+- Bugs encontrados e corrigidos: (1) chamadas de vsetvli com avl_is_x0=1
+  faziam vl=vlmax (lixo nos strips); (2) `zt_convert` sem conversoes com
+  64 bits e dispatch da ALU sem largura 64 (acumulador do vtdot SEW=32
+  retornava lixo); (3) `vrgather.vv` restrito a SEW=32, generalizado;
+  (4) gather valida indice contra VLMAX, exigindo VLEN grande e matrizes
+  pequenas no SpMV.
+

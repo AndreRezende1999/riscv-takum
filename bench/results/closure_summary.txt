@@ -1,0 +1,34 @@
+fechamento aritmetico (positivos na faixa da posit correspondente)
+  (linear T8: 73 valores; exaustivo)
+  linear T8   add        395/   5329 =   7.41% 
+  linear T8   sub        468/   2701 =  17.33% 
+  linear T8   mul       1796/   5329 =  33.70% 
+  linear T8   div       1796/   5329 =  33.70% 
+  linear T8   inv         39/     73 =  53.42% 
+  linear T8   sqrt        16/     73 =  21.92% 
+  linear T8   square      16/     73 =  21.92% 
+  (linear T16: 23681 valores; pares amostrados)
+  linear T16  add     112350/2000000 =   5.62% (amostrado)
+  linear T16  sub     112601/ 999578 =  11.26% (amostrado)
+  linear T16  mul      23244/2000000 =   1.16% (amostrado)
+  linear T16  div      24303/2000000 =   1.22% (amostrado)
+  linear T16  inv        113/  23681 =   0.48% (amostrado)
+  linear T16  sqrt       509/  23681 =   2.15% (amostrado)
+  linear T16  square     747/  23681 =   3.15% (amostrado)
+  (log T8: 81 valores; exaustivo)
+  log    T8   add          0/   6561 =   0.00% 
+  log    T8   sub         81/   3321 =   2.44% 
+  log    T8   mul       2701/   6561 =  41.17% 
+  log    T8   div       2701/   6561 =  41.17% 
+  log    T8   inv         81/     81 = 100.00% 
+  log    T8   sqrt        49/     81 =  60.49% 
+  log    T8   square      49/     81 =  60.49% 
+  (log T16: 25513 valores; pares amostrados)
+  log    T16  add          0/2000000 =   0.00% (amostrado)
+  log    T16  sub         84/1000682 =   0.01% (amostrado)
+  log    T16  mul     734868/2000000 =  36.74% (amostrado)
+  log    T16  div     735000/2000000 =  36.75% (amostrado)
+  log    T16  inv      25513/  25513 = 100.00% (amostrado)
+  log    T16  sqrt     21481/  25513 =  84.20% (amostrado)
+  log    T16  square   25513/  25513 = 100.00% (amostrado)
+closure.csv gerado

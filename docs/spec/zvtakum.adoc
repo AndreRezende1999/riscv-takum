@@ -127,7 +127,7 @@ São reutilizados `vl`, `vstart`, `vta`/`vma` e o mascaramento por `v0`.
 | `vtadd.vv` | stem:[vd_i = vd_i?] não: stem:[vd_i = vs2_i + vs1_i] | elemento a elemento, saturante, NaR propaga
 | `vtsub.vv` | stem:[vd_i = vs2_i - vs1_i] | idem
 | `vtmul.vv` | stem:[vd_i = vs2_i times vs1_i] | idem
-| `vtdot.vv` | stem:[vd_0 = sum_i vs2_i times vs1_i] | redução com acúmulo alargado: T8->T16, T16->T32, T32->T64; destino com `EEW = 2*SEW` (grupo de 2 registradores); `vs1` reservado (zero)
+| `vtdot.vv` | acumula em stem:[vd_0]: stem:[vd_0 <- vd_0 + sum_i vs2_i times vs1_i] | redução com acúmulo alargado: T8->T16, T16->T32, T32->T64; destino com `EEW = 2*SEW` (grupo de 2 registradores); `vs1` reservado (zero); `vd_0` deve ser inicializado pelo software (ex.: `vmv`/zero)
 | `vncvt.t.t` | estreitamento stem:[T{2n} -> T{n}] (T32->T16->T8) | como `vfncvt`: origem com `EEW = 2*SEW`; RNE + saturação
 |====
 

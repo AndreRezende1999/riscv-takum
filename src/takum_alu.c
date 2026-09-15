@@ -20,6 +20,10 @@
 				return (uint32_t)takum_log32_##fn(          \
 				    (takum_log32)(uint32_t)a,               \
 				    (takum_log32)(uint32_t)b);              \
+			case 64:                                            \
+				return (uint64_t)takum_log64_##fn(          \
+				    (takum_log64)(uint64_t)a,               \
+				    (takum_log64)(uint64_t)b);              \
 			default:                                            \
 				break;                                      \
 			}                                                   \
@@ -36,6 +40,10 @@
 				return (uint32_t)takum32_##fn(              \
 				    (takum32)(uint32_t)a,                   \
 				    (takum32)(uint32_t)b);                  \
+			case 64:                                            \
+				return (uint64_t)takum64_##fn(              \
+				    (takum64)(uint64_t)a,                   \
+				    (takum64)(uint64_t)b);                  \
 			default:                                            \
 				break;                                      \
 			}                                                   \
@@ -57,6 +65,9 @@
 			case 32:                                            \
 				return (uint32_t)takum_log32_##fn(          \
 				    (takum_log32)(uint32_t)a);              \
+			case 64:                                            \
+				return (uint64_t)takum_log64_##fn(          \
+				    (takum_log64)(uint64_t)a);              \
 			default:                                            \
 				break;                                      \
 			}                                                   \
@@ -70,6 +81,9 @@
 			case 32:                                            \
 				return (uint32_t)takum32_##fn(              \
 				    (takum32)(uint32_t)a);                  \
+			case 64:                                            \
+				return (uint64_t)takum64_##fn(              \
+				    (takum64)(uint64_t)a);                  \
 			default:                                            \
 				break;                                      \
 			}                                                   \
@@ -128,6 +142,8 @@ zt_neg(zt_variant variant, uint32_t width, uint64_t a)
 		return (uint16_t)(-(int16_t)(uint16_t)b);
 	case 32:
 		return (uint32_t)(-(int32_t)(uint32_t)b);
+	case 64:
+		return (uint64_t)(-(int64_t)(uint64_t)b);
 	default:
 		break;
 	}

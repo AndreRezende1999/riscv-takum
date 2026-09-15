@@ -36,12 +36,11 @@ make demo          # exemplos com zt-disa/zt-run
 
 ## Estado
 
-F4a concluido - benchmark de viabilidade com 100 matrizes SuiteSparse
-(15 formatos: IEEE FP8/FP16/bf16/FP32/FP64, takum linear/log T8-T32 e posit
-8/16/32), com CDFs e resumo em `bench/results`. Alem disso: codec/ALU,
-especificacao Zvtakum, encodings, reestruturacao RVV e simulador funcional.
-Ver `docs/devlog.md`, `docs/spec/zvtakum.adoc` e
-`docs/rvv-restructuring.md`.
+F4 concluido - benchmark de viabilidade (100 matrizes SuiteSparse, 15
+formatos, CDFs), fechamento aritmetico (T8/T16) e SpMV no simulador
+(T8/T16/T32 vs f32). Codec/ALU, especificacao Zvtakum, encodings,
+reestruturacao RVV e simulador funcional completos. Ver `docs/devlog.md` e
+`bench/results/` (summaries, CSVs e figuras).
 
 ## Licenca
 

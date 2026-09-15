@@ -64,7 +64,13 @@ bench-analyze:
 	$(PYTHON) scripts/analyze.py bench/results/relative_error.csv \
 		--outdir bench/results --prefix cdf
 
-bench: bench-convert bench-analyze
+bench-closure: $(BUILD)/bench/closure
+	$(BUILD)/bench/closure > bench/results/closure_summary.txt
+
+bench-spmv: $(BUILD)/bench/spmv
+	$(BUILD)/bench/spmv > bench/results/spmv_summary.txt
+
+bench: bench-convert bench-analyze bench-closure bench-spmv
 
 test: all
 	@for t in $(TESTBIN); do \
@@ -93,4 +99,5 @@ clean:
 distclean: clean
 	cd third_party/libtakum && $(MAKE) clean
 
-.PHONY: all test third_party demo matrices bench-convert bench-analyze bench clean distclean
+.PHONY: all test third_party demo matrices bench-convert bench-analyze \
+	bench-closure bench-spmv bench clean distclean

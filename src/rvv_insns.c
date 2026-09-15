@@ -255,9 +255,6 @@ vrgather_vv(rvv_state *s, uint32_t vd, uint32_t vs2, uint32_t vs1, uint32_t vm)
 {
 	uint32_t vlmax = rvv_vlmax(s);
 
-	if (s->sew != 32u)
-		return RVV_ERR_ILLEGAL;
-
 	for (uint32_t i = 0; i < vlmax; i++) {
 		int active = (i < s->vl) && (vm != 0u || mask_get(s, i) != 0);
 
