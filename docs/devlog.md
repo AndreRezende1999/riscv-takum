@@ -81,3 +81,24 @@ make -j4 all
 make test
 ./build/tools/zt-format
 ```
+
+## 2026-09-15 - F2: reestruturacao RVV e encodings
+
+- Inventario verificado no `riscv-opcodes` (`extensions/`): `rv_v` = 375
+  instrucoes (FP = 92, conversoes vfcvt/vfwcvt/vfncvt = 21, reducoes FP =
+  6), bf16 = 4 (`rv_zvfbfmin`, `rv_zvfbfwma`), crypto = 41 em 8 arquivos
+  Zvk*. RVV nao tem FP8.
+- `docs/rvv-restructuring.md`: metodologia (4 diretrizes do artigo),
+  inventario por categoria, tabelas "original -> proposta" (bitwise,
+  inteiro, FP/conversoes, crypto), consolidacao de formatos, analise de
+  CSRs e limitacoes. Estimativa: 96 instrucoes de FP/conversao atuais ->
+  ~8 Zvtakum.
+- Analise de encodings: parser proprio do `rv_v` mostra que o unico
+  `funct6` livre no half de FP do OP-V e `0b111001`. Zvtakum usa esse
+  espaco com `funct3` como sub-opcode (provisorio, documentado).
+- `docs/opcodes/zvtakum.opcodes` (formato riscv-opcodes) com `vncvt.t.t`,
+  `vtadd.vv`, `vtsub.vv`, `vtmul.vv`, `vtdot.vv` e reservas.
+- `docs/spec/zvtakum.adoc` atualizado com semantica das instrucoes,
+  acumulacao alargada do `vtdot` (T8->T16, T16->T32, T32->T64), estreitamento
+  do `vncvt` e secao de excecoes/CSRs.
+

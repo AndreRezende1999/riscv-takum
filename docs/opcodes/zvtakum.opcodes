@@ -1,0 +1,24 @@
+# Zvtakum - encodings provisorios (formato riscv-opcodes)
+#
+# Espaco: OP-V (6..0=0x57), funct6=0b111001 (unico livre no half de FP+int
+# vetorial em 2026-09-15; ver docs/rvv-restructuring.md), bit 25 = 0.
+# funct3 usado como sub-opcode (provisorio; uma proposta formal precisaria
+# negociar espaco de opcode).
+#
+# Operandos: vm, vs2, vs1, vd seguem a convencao RVV; para vtdot.vv o campo
+# vs1 e reservado (deve ser 0).
+#
+# SEW seleciona o formato: SEW=8 -> T8, SEW=16 -> T16, SEW=32 -> T32.
+# vncvt.t.t: EEW = 2*SEW; vtdot.vv: destino/acumulador com EEW = 2*SEW.
+#
+# mnemonico     31..26=0x39 vm vs2 vs1 14..12=funct3 25=0 vd 6..0=0x57
+
+vncvt.t.t     31..26=0x39 vm vs2 vs1 14..12=0x0 25=0 vd 6..0=0x57
+vtadd.vv      31..26=0x39 vm vs2 vs1 14..12=0x1 25=0 vd 6..0=0x57
+vtsub.vv      31..26=0x39 vm vs2 vs1 14..12=0x2 25=0 vd 6..0=0x57
+vtmul.vv      31..26=0x39 vm vs2 vs1 14..12=0x3 25=0 vd 6..0=0x57
+vtdot.vv      31..26=0x39 vm vs2 vs1 14..12=0x4 25=0 vd 6..0=0x57
+# reservado para expansoes futuras (div, sqrt, .vf etc.)
+vtdiv.vv      31..26=0x39 vm vs2 vs1 14..12=0x5 25=0 vd 6..0=0x57
+vtsqrt.v      31..26=0x39 vm vs2 vs1 14..12=0x6 25=0 vd 6..0=0x57
+# 14..12=0x7 reservado

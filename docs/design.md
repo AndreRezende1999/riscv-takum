@@ -124,6 +124,23 @@ no PDF antes de virarem vetores golden).
 - As porcentagens de fechamento da Secao 5.6 do paper continuam tratadas
   como ancoras aproximadas.
 
+### D9 - Encodings e escopo das instrucoes (2026-09-15)
+
+- Instrucoes da Fase 2: `vtadd.vv`, `vtsub.vv`, `vtmul.vv`, `vtdot.vv`,
+  `vncvt.t.t` (escopo do enunciado), com `vtdiv.vv`/`vtsqrt.v` reservados.
+- `vtdot.vv`: acumulacao com alargamento gradual (F08 do artigo):
+  T8->T16, T16->T32, T32->T64; destino com EEW=2*SEW (grupo de 2
+  registradores), como `vwredsum.vs`. T64 existe apenas como acumulador.
+- `vncvt.t.t`: estreitamento como `vfncvt` (EEW=2*SEW -> SEW), RNE e
+  saturacao.
+- Encodings provisorios no unico funct6 livre do OP-V (0b111001), com
+  funct3 como sub-opcode e bit 25 = 0; arquivo
+  `docs/opcodes/zvtakum.opcodes`. Desvio da convencao de funct3
+  documentado em `docs/rvv-restructuring.md`.
+- Inventario RVV (riscv-opcodes): rv_v = 375 instrucoes (FP = 92,
+  conversoes = 21), bf16 = 4 (Zvfbfmin/Zvfbfwma), crypto = 41; nao ha
+  FP8 em RVV. Tabelas de reestruturacao em `docs/rvv-restructuring.md`.
+
 ## Riscos e pontos abertos
 
 - **Arredondamento**: ver D2; quantificar divergencia e documentar no artigo.

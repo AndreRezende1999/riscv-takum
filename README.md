@@ -33,10 +33,10 @@ make test          # testes
 
 ## Estado
 
-F1 concluido - codec T8/T16/T32 (variantes linear e logaritmica), ALU
-(add/sub/mul/div/sqrt/abs/neg), dois modos de arredondamento (RNE normativo
-e Algoritmo 1 do artigo), testes exaustivos T8 e propriedades formais.
-Ver `docs/spec/zvtakum.adoc` e `docs/devlog.md`.
+F2 concluido - alem do codec/ALU (F1), a especificacao Zvtakum
+(`vtadd.vv`, `vtsub.vv`, `vtmul.vv`, `vtdot.vv`, `vncvt.t.t`), os encodings
+provisorios e a reestruturacao RVV com tabelas "original -> proposta".
+Ver `docs/spec/zvtakum.adoc`, `docs/rvv-restructuring.md` e `docs/devlog.md`.
 
 ## Licenca
 

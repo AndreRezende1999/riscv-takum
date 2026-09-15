@@ -115,10 +115,61 @@ stem:[C] cabem sempre em 11 bits (stem:[1+1+3+7=12]) e os bits restantes são
 sempre de mantissa/fração. Essa é a base do argumento de hardware do artigo
 (decodificador compartilhado por todas as precisões).
 
+== Instruções Zvtakum
+
+`vtype.SEW` seleciona o formato de elemento: 8 -> T8, 16 -> T16, 32 -> T32.
+São reutilizados `vl`, `vstart`, `vta`/`vma` e o mascaramento por `v0`.
+
+.Instruções propostas (Fase 2 do projeto).
+[cols="1,2,3",options="header"]
+|====
+| Mnemônico | Operação | Observações
+| `vtadd.vv` | stem:[vd_i = vd_i?] não: stem:[vd_i = vs2_i + vs1_i] | elemento a elemento, saturante, NaR propaga
+| `vtsub.vv` | stem:[vd_i = vs2_i - vs1_i] | idem
+| `vtmul.vv` | stem:[vd_i = vs2_i times vs1_i] | idem
+| `vtdot.vv` | stem:[vd_0 = sum_i vs2_i times vs1_i] | redução com acúmulo alargado: T8->T16, T16->T32, T32->T64; destino com `EEW = 2*SEW` (grupo de 2 registradores); `vs1` reservado (zero)
+| `vncvt.t.t` | estreitamento stem:[T{2n} -> T{n}] (T32->T16->T8) | como `vfncvt`: origem com `EEW = 2*SEW`; RNE + saturação
+|====
+
+Semântica dos produtos no `vtdot.vv`: cada produto é calculado em precisão
+exata a partir dos valores decodificados e arredondado (RNE, saturante) para
+T_(2*SEW); a acumulação é feita em T_(2*SEW) com adição saturante. T64 não é
+um tipo de elemento geral: aparece apenas como acumulador/resultado de
+`vtdot.vv` com `SEW=32`.
+
+=== Encodings
+
+Provisórios, no único `funct6` livre do OP-V (`0b111001`, opcode `0x57`),
+com `funct3` como sub-opcode e bit 25 = 0. Arquivo
+`docs/opcodes/zvtakum.opcodes` no formato do `riscv-opcodes`:
+
+| Mnemônico | funct6 | funct3 |
+|---|---|---|
+| `vncvt.t.t` | `0b111001` | 0 |
+| `vtadd.vv` | `0b111001` | 1 |
+| `vtsub.vv` | `0b111001` | 2 |
+| `vtmul.vv` | `0b111001` | 3 |
+| `vtdot.vv` | `0b111001` | 4 |
+| `vtdiv.vv` (reservado) | `0b111001` | 5 |
+| `vtsqrt.v` (reservado) | `0b111001` | 6 |
+
+NOTA: o uso de `funct3` como sub-opcode difere da convenção RVV (onde
+`funct3` indica os tipos de operandos). É uma escolha provisória do projeto,
+registrada em `docs/rvv-restructuring.md`.
+
+=== Exceções e CSRs
+
+Não há novas exceções de ponto flutuante nem novos CSRs: a aritmética é
+sempre saturante, NaR é um valor (não uma exceção) e o arredondamento é RNE
+fixo. `vstart` preserva a semântica de retomada da RVV; operações mascaradas
+e o tratamento de tail seguem `vta`/`vma`.
+
 == Estado
 
 * F1 (concluído): codec (decode/encode, ghost bits, campos), ALU
   (add/sub/mul/div/sqrt/abs/neg), dois modos de arredondamento, testes
   exaustivos T8 e propriedades formais.
-* F2 (próximo): instruções `vtadd.vv`, `vtsub.vv`, `vtmul.vv`, `vtdot.vv`,
-  `vncvt.t.t`, encodings e semântica vetorial.
+* F2 (concluído): instruções `vtadd.vv`, `vtsub.vv`, `vtmul.vv`,
+  `vtdot.vv`, `vncvt.t.t` especificadas, encodings provisórios e
+  reestruturação RVV em `docs/rvv-restructuring.md`.
+* F3 (próximo): simulador funcional RVV + Zvtakum.
