@@ -6,6 +6,7 @@ LDLIBS   += -lm
 
 BUILD    := build
 LIBTAKUM := third_party/libtakum/libtakum.a
+LIBPOSIT := third_party/libposit/libposit.a
 LIB      := $(BUILD)/libzvtakum.a
 
 SRC      := $(wildcard src/*.c)
@@ -14,13 +15,18 @@ TESTSRC  := $(wildcard tests/*.c)
 TESTBIN  := $(patsubst tests/%.c,$(BUILD)/tests/%,$(TESTSRC))
 TOOLSRC  := $(wildcard tools/*.c)
 TOOLBIN  := $(patsubst tools/%.c,$(BUILD)/tools/%,$(TOOLSRC))
+BENCHSRC := $(wildcard bench/*.c)
+BENCHBIN := $(patsubst bench/%.c,$(BUILD)/bench/%,$(BENCHSRC))
 
-all: $(LIB) $(TESTBIN) $(TOOLBIN)
+all: $(LIB) $(TESTBIN) $(TOOLBIN) $(BENCHBIN)
 
-third_party: $(LIBTAKUM)
+third_party: $(LIBTAKUM) $(LIBPOSIT)
 
 $(LIBTAKUM):
 	cd third_party/libtakum && ./configure && $(MAKE) libtakum.a
+
+$(LIBPOSIT):
+	cd third_party/libposit && ./configure && $(MAKE) libposit.a
 
 $(BUILD)/src/%.o: src/%.c
 	@mkdir -p $(@D)
@@ -37,6 +43,28 @@ $(BUILD)/tests/%: tests/%.c $(LIB) $(LIBTAKUM)
 $(BUILD)/tools/%: tools/%.c $(LIB) $(LIBTAKUM)
 	@mkdir -p $(@D)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -o $@ $< $(LIB) $(LIBTAKUM) $(LDLIBS)
+
+$(BUILD)/bench/%: bench/%.c $(LIB) $(LIBTAKUM) $(LIBPOSIT)
+	@mkdir -p $(@D)
+	$(CC) $(CPPFLAGS) -Ithird_party/libposit -std=gnu11 -O2 -Wall -Wextra \
+		-Wl,--allow-multiple-definition \
+		-o $@ $< $(LIB) $(LIBTAKUM) $(LIBPOSIT) $(LDLIBS)
+
+PYTHON  ?= $(shell test -x .venv/bin/python && echo .venv/bin/python || echo python3)
+
+matrices:
+	$(PYTHON) scripts/fetch_matrices.py --count 100 --out bench/matrices
+
+bench-convert: $(BUILD)/bench/convert_formats
+	@mkdir -p bench/results
+	$(BUILD)/bench/convert_formats bench/matrices \
+		bench/results/relative_error.csv bench/results/log_relative_error.csv
+
+bench-analyze:
+	$(PYTHON) scripts/analyze.py bench/results/relative_error.csv \
+		--outdir bench/results --prefix cdf
+
+bench: bench-convert bench-analyze
 
 test: all
 	@for t in $(TESTBIN); do \
@@ -65,4 +93,4 @@ clean:
 distclean: clean
 	cd third_party/libtakum && $(MAKE) clean
 
-.PHONY: all test third_party demo clean distclean
+.PHONY: all test third_party demo matrices bench-convert bench-analyze bench clean distclean

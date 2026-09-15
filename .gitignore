@@ -7,6 +7,9 @@ bench/matrices/*.mtx
 bench/matrices/*.mtx.gz
 bench/results/*
 !bench/results/.gitkeep
+!bench/results/*.csv
+!bench/results/*.txt
+!bench/results/*.png
 paper/build/
 paper/*.aux
 paper/*.log

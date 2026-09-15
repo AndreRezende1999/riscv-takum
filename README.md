@@ -36,10 +36,12 @@ make demo          # exemplos com zt-disa/zt-run
 
 ## Estado
 
-F3 concluido - codec/ALU, especificacao Zvtakum, encodings, reestruturacao
-RVV e simulador funcional (RVV subconjunto + Zvtakum) com contadores de
-instrucao/CSR. Ver `docs/spec/zvtakum.adoc`, `docs/rvv-restructuring.md` e
-`docs/devlog.md`.
+F4a concluido - benchmark de viabilidade com 100 matrizes SuiteSparse
+(15 formatos: IEEE FP8/FP16/bf16/FP32/FP64, takum linear/log T8-T32 e posit
+8/16/32), com CDFs e resumo em `bench/results`. Alem disso: codec/ALU,
+especificacao Zvtakum, encodings, reestruturacao RVV e simulador funcional.
+Ver `docs/devlog.md`, `docs/spec/zvtakum.adoc` e
+`docs/rvv-restructuring.md`.
 
 ## Licenca
 

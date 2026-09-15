@@ -2,3 +2,7 @@
 	path = third_party/libtakum
 	url = https://github.com/takum-arithmetic/libtakum
 	ignore = dirty
+[submodule "third_party/libposit"]
+	path = third_party/libposit
+	url = https://github.com/takum-arithmetic/libposit
+	ignore = dirty

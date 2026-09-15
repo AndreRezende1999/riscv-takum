@@ -141,3 +141,36 @@ make test
 make demo
 ```
 
+## 2026-09-15 - F4a: benchmark de viabilidade (matrizes)
+
+- `scripts/fetch_matrices.py`: seleciona e baixa um subconjunto
+  representativo do SuiteSparse (`ssstats.csv`, nnz <= 50000,
+  estratificado por grupo/quartis, semente 42). Resultado: 100 matrizes em
+  `bench/matrices` (nao versionadas).
+- `bench/convert_formats.c`: le `.mtx` (coordinate real/pattern, general e
+  symmetric; matrizes complexas ignoradas), converte cada entrada para 15
+  formatos e acumula o erro relativo 2-norma contra long double (80 bits no
+  x86-64; desvio do binary128 do artigo registrado em design.md):
+  - codecs proprios: E4M3 (overflow -> NaN, sem Inf), E5M2 (Inf/NaN),
+    bf16 (RNE);
+  - `_Float16` do compilador para f16;
+  - takum linear/log 8/16/32 via libtakum/zt_decode;
+  - posit 8/16/32 via libposit (submodule adicionado; necessita
+    `-Wl,--allow-multiple-definition` por colisao de simbolos internos
+    `util_round_*` entre libtakum e libposit).
+- `scripts/analyze.py`: CDF ordenada (`cdf.sorted.csv`, coluna `percent`),
+  resumo (mediana/p90/max/% >100%) e figuras (`cdf_8/16/32.png`) via
+  matplotlib em `.venv`.
+- Resultados (100 matrizes; ver `bench/results/summary.txt`):
+  mediana do erro relativo:
+  - 8 bits: f8_e4m3 7.2e-3 (27 overflow), f8_e5m2 2.4e-2 (18 overflow),
+    takum8 5.7e-2, taklog8 5.4e-2, posit8 2.5e-2;
+  - 16 bits: f16 5.8e-6 (18 overflow), bf16 9.5e-4, takum16 1.5e-4,
+    taklog16 2.2e-4, posit16 8.4e-5;
+  - 32 bits: f32 1.0e-8, takum32 1.1e-9, taklog32 3.6e-9, posit32 1.0e-9.
+  Takum32 supera f32 na mediana/p90; nos 8 bits, os formatos IEEE
+  estouram (Inf/NaN) em ~20-27% das matrizes enquanto takum satura com
+  erro moderado (2-3% acima de 100%).
+- `make bench` executa coleta -> conversao -> analise; CSVs/figuras
+  versionados em `bench/results`.
+

@@ -159,6 +159,24 @@ no PDF antes de virarem vetores golden).
   aceita nomes ABI de registradores (a0..a7/t0..t6), tokens de vtype
   (e8/e16/e32, m1/m2/m4/m8, ta/ma) e sufixo `v0.t` para mascaramento.
 
+### D11 - Benchmark de viabilidade (2026-09-15)
+
+- Referencia numerica: `long double` (80 bits, mantissa de 64 bits) em vez
+  do binary128 do artigo, pois o ambiente nao tem `quadmath.h`; a diferenca
+  e irrelevante para formatos de ate 32 bits (documentado no devlog).
+- Dataset: 100 matrizes SuiteSparse com nnz <= 50000 (o artigo usa as 1401;
+  subconjunto representativo aprovado no plano), baixadas por script e nao
+  versionadas.
+- Formatos: 15 colunas (f8 E4M3/E5M2, f16, bf16, f32, f64, takum linear e
+  log 8/16/32, posit 8/16/32).
+- Decisoes de codec: E4M3 sem Inf (overflow -> NaN, conforme OCP); E5M2 com
+  Inf/NaN; bf16 e f16 por RNE; takum via libtakum/zt_decode.
+- Metricas: erro relativo 2-norma (padrao do MuFoLAB) e erro log-relativo
+  (NaN quando os sinais divergem); saidas CSV + figuras por grupo de bits.
+- libposit entra como submodule; link do benchmark usa
+  `--allow-multiple-definition` (simbolos `util_round_*` duplicados entre
+  as duas bibliotecas, codigo identico).
+
 ## Riscos e pontos abertos
 
 - **Arredondamento**: ver D2; quantificar divergencia e documentar no artigo.
