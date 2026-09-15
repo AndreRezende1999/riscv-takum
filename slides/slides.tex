@@ -1,0 +1,225 @@
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+\graphicspath{{../bench/results/}}
+
+\title[Takum na RVV]{Aritmética Takum na Extensão Vetorial RISC-V}
+\subtitle{Projeto Integrador AOC/UFMG}
+% TODO(equipe): preencher autores.
+\author{Grupo do Projeto Integrador}
+\institute{Departamento de Engenharia Eletrônica -- UFMG}
+\date{2026}
+
+\begin{document}
+
+\begin{frame}
+	\titlepage
+\end{frame}
+
+\begin{frame}{Motivação: proliferação de formatos}
+	\begin{itemize}
+		\item RVV hoje: FP16 (\texttt{Zvfh}), bfloat16
+		      (\texttt{Zvfbfmin}/\texttt{Zvfbfwma}), FP32/64, cripto
+		      vetorial.
+		\item 375 instruções no RVV 1.0; \textbf{92 de ponto
+		      flutuante}, sendo \textbf{21 conversões} e 6 reduções.
+		\item Cada formato novo adiciona conversões cruzadas, cantos
+		      de exceção e área de decodificador.
+		\item FP8 ainda não existe em RVV (mas é candidato).
+	\end{itemize}
+	\vfill
+	\small Referência: Hunhold, \emph{Streamlining SIMD ISA Extensions with
+	Takum Arithmetic: A Case Study on Intel AVX10.2} (MOCAST 2025).
+\end{frame}
+
+\begin{frame}{Takum em 30 segundos}
+	\begin{itemize}
+		\item Formato de precisão afunilada com faixa dinâmica
+		      \textbf{limitada} já em 12 bits:
+		      $S,D,R,C,F$; característica sempre $\le$ 11 bits.
+		\item Decodificador \textbf{comum} a todas as larguras
+		      (12 bits mais significativos); T8/T16/T32.
+		\item Negação = complemento de dois; NaR único
+		      (\texttt{0x80}); aritmética saturante; sem infinito.
+		\item Variantes: \textbf{linear} (base 2, do estudo AVX10.2) e
+		      \textbf{logarítmica} (base $\sqrt{e}$, padrão do artigo
+		      original).
+		\item Propriedade marcante: inversão exata por operação de bits
+		      (variante log).
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Objetivo e metodologia}
+	\textbf{Replicar o estudo AVX10.2$\to$Takum na RVV}, com implementação
+	aberta:
+	\begin{enumerate}
+		\item \textbf{Codec/ALU} T8/T16/T32, duas variantes, dois modos
+		      de arredondamento (RNE e Algoritmo 1).
+		\item \textbf{Especificação Zvtakum}: \texttt{vtadd.vv},
+		      \texttt{vtsub.vv}, \texttt{vtmul.vv},
+		      \texttt{vtdot.vv}, \texttt{vncvt.t.t} + encodings.
+		\item \textbf{Simulador funcional} RVV (subconjunto) com
+		      contadores de instrução/CSR.
+		\item \textbf{Avaliações}: viabilidade em 100 matrizes
+		      SuiteSparse, fechamento aritmético, SpMV.
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Zvtakum: instruções propostas}
+	\begin{table}
+		\centering
+		\begin{tabular}{lll}
+			\toprule
+			Mnemônico & Operação & Observação \\
+			\midrule
+			\texttt{vtadd.vv} & $vd_i = vs2_i + vs1_i$ & saturante \\
+			\texttt{vtsub.vv} & $vd_i = vs2_i - vs1_i$ & saturante \\
+			\texttt{vtmul.vv} & $vd_i = vs2_i \times vs1_i$ & saturante \\
+			\texttt{vtdot.vv} & $vd_0 \mathrel{+}= \sum vs2_i \times vs1_i$
+			                  & acúmulo alargado T8$\to$T16, \dots \\
+			\texttt{vncvt.t.t} & $T_{2n} \to T_n$ & estreitamento RNE \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	\begin{itemize}
+		\item SEW seleciona T8/T16/T32; máscara/tail do RVV
+		      (\texttt{v0}, \texttt{vta}/\texttt{vma}); sem CSRs novos.
+		\item Encodings provisórios: \texttt{funct6=0b111001} (único
+		      livre no OP-V) com \texttt{funct3} como sub-opcode.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Simulador funcional}
+	\begin{itemize}
+		\item C11 próprio + libtakum (ISC); VLEN configurável
+		      (padrão 256, benchmarks 1024), LMUL 1--8.
+		\item RVV: \texttt{vsetvl*}, \texttt{vle/vse} (8/16/32),
+		      \texttt{vfadd/vfmul} (f32), \texttt{vfredusum},
+		      \texttt{vrgather.vv}, \texttt{vmv}/\texttt{vfmv}.
+		\item Zvtakum: as cinco instruções, com máscara/tail.
+		\item Contadores: instruções (total/RVV/Zvtakum), escritas de
+		      \texttt{vtype}/\texttt{vl}, elementos ativos; trace.
+		\item Ferramentas: \texttt{zt-disa} (encode/decode) e
+		      \texttt{zt-run} (executa \texttt{.zt}); exemplos e
+		      \texttt{make demo}.
+		\item Testes: T8 exaustivo (256 padrões; $256^2$ pares por
+		      operação), propriedades (monotonicidade, negação,
+		      inversão), round-trips contra libtakum.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Resultado 1: viabilidade (100 matrizes)}
+	\begin{columns}
+		\begin{column}{0.48\textwidth}
+			\includegraphics[width=\textwidth]{cdf_8.png}
+		\end{column}
+		\begin{column}{0.48\textwidth}
+			\includegraphics[width=\textwidth]{cdf_32.png}
+		\end{column}
+	\end{columns}
+	\vspace{-0.3em}
+	\small
+	\begin{itemize}
+		\item 8 bits: FP8 estoura em 18--27\% das matrizes; takum satura
+		      com erro moderado.
+		\item 32 bits: takum32 mediana 1,1e-9 vs.\ f32 1,0e-8.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Resultado 2: fechamento aritmético (log)}
+	\begin{table}
+		\centering
+		\small
+		\begin{tabular}{lcccc}
+			\toprule
+			 & \multicolumn{2}{c}{T8} & \multicolumn{2}{c}{T16} \\
+			 & nosso & artigo & nosso & artigo \\
+			\midrule
+			add    & 0,00\% & 0,0\%  & 0,00\% & 0,0\% \\
+			mul    & 41,2\% & 40,3\% & 36,7\% & 36,6\% \\
+			div    & 41,2\% & 40,3\% & 36,8\% & 36,7\% \\
+			inv    & 100\%  & 100\%  & 100\%  & 100\% \\
+			sqrt   & 60,5\% & 58,8\% & 84,2\% & 84,1\% \\
+			square & 60,5\% & 60,0\% & 100\%  & 100\% \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	\small T8 exaustivo; T16 com 2M de pares amostrados na faixa da posit.
+\end{frame}
+
+\begin{frame}{Resultado 3: SpMV no simulador}
+	\begin{table}
+		\centering
+		\small
+		\begin{tabular}{llrr}
+			\toprule
+			Matriz & Kernel & erro rel. de $y$ & instruções \\
+			\midrule
+			lap2d & f32       & 0,0    & 126 \\
+			lap2d & takum T16 & 1,3e-4 & 151 \\
+			lap2d & takum T32 & 2,3e-9 & 151 \\
+			rand  & f32       & 5,1e-8 & 161 \\
+			rand  & takum T16 & 1,3e-4 & 193 \\
+			rand  & takum T32 & 3,5e-9 & 193 \\
+			\bottomrule
+		\end{tabular}
+	\end{table}
+	\small Referência em long double; kernel takum = gather + \texttt{vtdot}
+	(acúmulo alargado) + \texttt{vncvt}; f32 = gather + \texttt{vfmul} +
+	\texttt{vfredusum}.
+\end{frame}
+
+\begin{frame}{Reestruturação do ISA}
+	\begin{itemize}
+		\item Inventário (riscv-opcodes): 375 instruções no RVV 1.0;
+		      92 de FP; 21 conversões; bf16 = 4; cripto = 41.
+		\item Diretrizes do artigo: agrupar, nomear B/U/S/T,
+		      consolidar formatos, generalizar precisões.
+		\item Resultado: \textbf{96 instruções de FP/conversão
+		      $\to$ 8 Zvtakum} (5 implementadas + 3 reservadas).
+		\item Comparações viram comparações inteiras (ordem two's
+		      complement); bf16/FP16 viram T16/T8.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Limitações e trabalhos futuros}
+	\begin{itemize}
+		\item 100 matrizes (artigo: 1401); referência long double
+		      (artigo: binary128) — desvios documentados.
+		\item Simulador: sem LMUL fracionário, FP16/FP64 de base;
+		      \texttt{vrgather} limita o tamanho das matrizes do SpMV.
+		\item Encodings provisórios (espaço OP-V a negociar).
+		\item Futuro: RTL do codec em FPGA, formas \texttt{.vf},
+		      kernels mistos, execução das 1401 matrizes.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Conclusão}
+	\begin{itemize}
+		\item Metodologia do AVX10.2 replicada na RVV com implementação
+		      aberta e reprodutível.
+		\item T32 bate f32 em erro representacional e em SpMV;
+		      fechamento reproduz a literatura.
+		\item Superfície de FP de baixa precisão da RVV reduzida de 96
+		      para 8 operações, sem CSRs novos.
+	\end{itemize}
+	\vfill
+	\centering \large Obrigado! Perguntas?
+\end{frame}
+
+\begin{frame}{Demo ao vivo}
+	\begin{itemize}
+		\item \texttt{make test} — testes do codec/ALU/simulador.
+		\item \texttt{make demo} — encode/decode e execução dos
+		      exemplos \texttt{axpy.zt} e \texttt{takum\_dot.zt}.
+		\item \texttt{make bench} — regenera CSVs e figuras.
+	\end{itemize}
+\end{frame}
+
+\end{document}

@@ -32,15 +32,31 @@ git submodule update --init --recursive
 make third_party   # compila libtakum (pinada em v2.0.0)
 make test          # testes
 make demo          # exemplos com zt-disa/zt-run
+make bench         # benchmarks (matrizes -> CSV -> CDFs)
 ```
+
+## Entregaveis
+
+- **Codigo/ferramentas**: `src/`, `include/`, `tools/`, `tests/` (simulador
+  RVV+Zvtakum, codec/ALU, zt-disa/zt-run, testes exaustivos).
+- **Especificacao**: `docs/spec/zvtakum.adoc` (formato, instrucoes,
+  encodings, excecoes), `docs/rvv-restructuring.md` (tabelas
+  original->proposta), `docs/opcodes/zvtakum.opcodes`.
+- **Benchmarks**: `bench/` + `bench/results/` (CSVs, summaries, figuras CDF,
+  fechamento, SpMV).
+- **Artigo IEEE** (ate 6 paginas, em ingles): `paper/main.tex` - compila com
+  `make paper` (LaTeX) ou no Overleaf (template IEEE conference).
+- **Slides + roteiro da demo**: `slides/slides.tex` e `slides/roteiro.md`
+  (`make slides`).
+- **Documentacao do processo**: `docs/devlog.md` (cronologico) e
+  `docs/design.md` (decisoes).
 
 ## Estado
 
-F4 concluido - benchmark de viabilidade (100 matrizes SuiteSparse, 15
-formatos, CDFs), fechamento aritmetico (T8/T16) e SpMV no simulador
-(T8/T16/T32 vs f32). Codec/ALU, especificacao Zvtakum, encodings,
-reestruturacao RVV e simulador funcional completos. Ver `docs/devlog.md` e
-`bench/results/` (summaries, CSVs e figuras).
+Projeto completo (F0-F5): codec/ALU, especificacao Zvtakum, encodings,
+reestruturacao RVV, simulador funcional, benchmark de viabilidade (100
+matrizes, 15 formatos), fechamento aritmetico (T8/T16) e SpMV; artigo e
+slides prontos para preencher autores e apresentar.
 
 ## Licenca
 

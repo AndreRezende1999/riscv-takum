@@ -72,6 +72,12 @@ bench-spmv: $(BUILD)/bench/spmv
 
 bench: bench-convert bench-analyze bench-closure bench-spmv
 
+paper:
+	cd paper && latexmk -pdf -interaction=nonstopmode main.tex
+
+slides:
+	cd slides && latexmk -pdf -interaction=nonstopmode slides.tex
+
 test: all
 	@for t in $(TESTBIN); do \
 		echo "== $$t"; \
@@ -100,4 +106,4 @@ distclean: clean
 	cd third_party/libtakum && $(MAKE) clean
 
 .PHONY: all test third_party demo matrices bench-convert bench-analyze \
-	bench-closure bench-spmv bench clean distclean
+	bench-closure bench-spmv bench paper slides clean distclean

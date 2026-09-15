@@ -199,3 +199,19 @@ make demo
   (4) gather valida indice contra VLMAX, exigindo VLEN grande e matrizes
   pequenas no SpMV.
 
+## 2026-09-15 - F5: artigo IEEE + slides
+
+- `paper/main.tex` (IEEEtran, 3 paginas): introducao, relacionados,
+  metodologia (codec, Zvtakum, reestruturacao RVV, simulador, benchmarks),
+  resultados (viabilidade com Tabela 1, fechamento com comparacao ao artigo,
+  SpMV, complexidade de ISA/CSR) e conclusao. `paper/refs.bib` com 10
+  referencias. Compila com `make paper` (latexmk).
+- Ferramentas LaTeX: TinyTeX desatualizado bloqueava o tlmgr; resolvido
+  trocando o repositorio para `mirror.ctan.org` e instalando
+  `ieeetran`, `beamer`, `cite`, `booktabs`, `courier` e dependencias.
+- `slides/slides.tex` (13 slides) e `slides/roteiro.md` (estrutura de 15
+  min + demo + perguntas provaveis).
+- README reorganizado com entregaveis e alvos `make paper`/`make slides`.
+- Pendencia manual da equipe: preencher autores/afiliacao nos dois fontes e
+  (opcional) rodar as 1401 matrizes do artigo.
+
