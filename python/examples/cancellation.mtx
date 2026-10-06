@@ -1,0 +1,9 @@
+%%MatrixMarket matrix coordinate real general
+% Original synthetic test fixture, not a SuiteSparse matrix.
+% With x=ones, first row sums to 1/64, second row to zero.
+3 3 5
+1 1 1
+1 2 0.015625
+1 3 -1
+2 1 1
+2 3 -1

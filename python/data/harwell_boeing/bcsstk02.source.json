@@ -1,0 +1,13 @@
+{
+  "collection": "NIST Matrix Market / Harwell-Boeing",
+  "name": "bcsstk02",
+  "source_author": "John Lewis, Boeing Computer Services",
+  "domain": "structural engineering",
+  "retrieved": "2026-10-06",
+  "pilot_already_observed": false,
+  "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/bcsstruc1/bcsstk02.html",
+  "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk02.mtx.gz",
+  "sha256": "20bc89a0355ebe9da3a02feafbae22370f0c9c5e6c4103559714b503885336a0",
+  "archive_sha256": "cd27f10160c063ae16d07ec99efa61c02b83bb5689ef5009985194d2e59c238a",
+  "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+}

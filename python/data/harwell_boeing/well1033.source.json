@@ -1,0 +1,13 @@
+{
+  "collection": "NIST Matrix Market / Harwell-Boeing",
+  "name": "well1033",
+  "source_author": "Michael Saunders, Stanford University",
+  "domain": "surveying least squares",
+  "retrieved": "2026-10-06",
+  "pilot_already_observed": false,
+  "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/lsq/well1033.html",
+  "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/lsq/well1033.mtx.gz",
+  "sha256": "9953cb6091a268afb6725bd92c26cdea68c8897b2d9a31a0656b0c0022e25f0c",
+  "archive_sha256": "5489ac8433eb94f98e9f452c0501eb62df545070749e45636cdaf701df5f3444",
+  "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+}

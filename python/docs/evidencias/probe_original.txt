@@ -1,0 +1,7 @@
+E4M3 +448: got=0x7f expected=0x7e
+E4M3 -448: got=0xff expected=0xfe
+vsetvli rd=x0 rs1=x0: got_vl=8 expected=3
+vsetvli rd=x1 rs1=x0: got_vl=3 expected=8
+masked reduction bit0=0 bit1=1 zero seed: got=100.0 expected=3.0
+vl=0 FP add: got=0xffffffff expected=0x42c80000 (unchanged)
+vstart=1 FP add lane0: got=6.0 expected=100.0 (unchanged)

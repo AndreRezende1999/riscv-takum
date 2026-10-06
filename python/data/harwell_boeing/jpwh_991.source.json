@@ -1,0 +1,13 @@
+{
+  "collection": "NIST Matrix Market / Harwell-Boeing",
+  "name": "jpwh_991",
+  "source_author": "J. P. Whelan, Philips Research Laboratories",
+  "domain": "circuit physics",
+  "retrieved": "2026-10-06",
+  "pilot_already_observed": false,
+  "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/cirphys/jpwh_991.html",
+  "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/cirphys/jpwh_991.mtx.gz",
+  "sha256": "b58fec585ed0e7a324c1de56d28bd9900ffd2844c8f08db92516afe5c0f4d008",
+  "archive_sha256": "5a8bee63ba8d4762297dba24ffc613e4edb64b682efc98404fcf9808ed5189b0",
+  "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+}

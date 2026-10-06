@@ -1,0 +1,1192 @@
+{
+  "upstream_url": "https://github.com/takum-arithmetic/libtakum",
+  "upstream_version": "2.0.0",
+  "upstream_commit": "776ac0ca7855f640100731ed8bbb0c7cf83b2d94",
+  "variant": "linear",
+  "license": "ISC; copyright 2024-2025 Laslo Hunhold",
+  "upstream_zip_sha256": "a221cfc06f228389995cf67f829d34c7bf475a3fd32175fab87c18a766878a3b",
+  "reference_sha256": "b030eb0478d705fd7f9258835de42ada67fcf6ebb5bfe03c7d8fc93aa3498803",
+  "gzip_sha256": "c37b67a9c3378b070f88ce06d1a13819ee6e246b06771b861e8da0e147299abf",
+  "exporter_sha256": "38d377cbabbf19e7a40e24ec6f6737cd7b0520b5d73367bdb5f7bb9cbd0fd98e",
+  "upstream_archive_sha256": "bbbd38aeafdc2bdef27d029aeae39b02574d87245c4827365a57e069cf0f1d0a",
+  "upstream_config_sha256": "c841afa8225e58c37e2517b32aa972033cb642e4cf866daf99461f7c31caf9c4",
+  "generation_environment": "Ubuntu-20.04 via WSL; FE_TONEAREST; compiler version not separately captured",
+  "compile_command": "gcc -std=c11 -O2 -Wall -Wextra -Wpedantic -fno-fast-math -I tmp/upstream/libtakum-776ac0ca7855f640100731ed8bbb0c7cf83b2d94 tools/libtakum_wide_reference.c tmp/upstream/libtakum-776ac0ca7855f640100731ed8bbb0c7cf83b2d94/libtakum.a -lm -o tmp/upstream/libtakum_wide_reference",
+  "generate_command": "tmp/upstream/libtakum_wide_reference tmp/upstream/libtakum_wide.tsv",
+  "platform": {
+    "DBL_MANT_DIG": 53,
+    "LDBL_MANT_DIG": 64,
+    "PAIRS_PER_WIDTH": 10000
+  },
+  "sampling": {
+    "t16": {
+      "boundary": 768,
+      "tie_probe": 384,
+      "stratified": 8848
+    },
+    "t32": {
+      "boundary": 768,
+      "tie_probe": 384,
+      "stratified": 8848
+    }
+  },
+  "classification_counts": {
+    "upstream_binary64_double_rounding": 128
+  },
+  "reviewed_mismatches": [
+    {
+      "check": "t32_mul",
+      "case": 784,
+      "kind": "tie_probe",
+      "a": 1073741825,
+      "b": 1140850689,
+      "actual": 1140850691,
+      "expected": 1140850690
+    },
+    {
+      "check": "t32_mul",
+      "case": 785,
+      "kind": "tie_probe",
+      "a": 1140850689,
+      "b": 1073741825,
+      "actual": 1140850691,
+      "expected": 1140850690
+    },
+    {
+      "check": "t32_mul",
+      "case": 786,
+      "kind": "tie_probe",
+      "a": 3221225471,
+      "b": 1140850689,
+      "actual": 3154116605,
+      "expected": 3154116606
+    },
+    {
+      "check": "t32_mul",
+      "case": 787,
+      "kind": "tie_probe",
+      "a": 1140850689,
+      "b": 3221225471,
+      "actual": 3154116605,
+      "expected": 3154116606
+    },
+    {
+      "check": "t32_mul",
+      "case": 788,
+      "kind": "tie_probe",
+      "a": 1073741825,
+      "b": 3154116607,
+      "actual": 3154116605,
+      "expected": 3154116606
+    },
+    {
+      "check": "t32_mul",
+      "case": 789,
+      "kind": "tie_probe",
+      "a": 3154116607,
+      "b": 1073741825,
+      "actual": 3154116605,
+      "expected": 3154116606
+    },
+    {
+      "check": "t32_mul",
+      "case": 790,
+      "kind": "tie_probe",
+      "a": 3221225471,
+      "b": 3154116607,
+      "actual": 1140850691,
+      "expected": 1140850690
+    },
+    {
+      "check": "t32_mul",
+      "case": 791,
+      "kind": "tie_probe",
+      "a": 3154116607,
+      "b": 3221225471,
+      "actual": 1140850691,
+      "expected": 1140850690
+    },
+    {
+      "check": "t32_mul",
+      "case": 808,
+      "kind": "tie_probe",
+      "a": 1073741827,
+      "b": 1185589931,
+      "actual": 1185589937,
+      "expected": 1185589936
+    },
+    {
+      "check": "t32_mul",
+      "case": 809,
+      "kind": "tie_probe",
+      "a": 1185589931,
+      "b": 1073741827,
+      "actual": 1185589937,
+      "expected": 1185589936
+    },
+    {
+      "check": "t32_mul",
+      "case": 810,
+      "kind": "tie_probe",
+      "a": 3221225469,
+      "b": 1185589931,
+      "actual": 3109377359,
+      "expected": 3109377360
+    },
+    {
+      "check": "t32_mul",
+      "case": 811,
+      "kind": "tie_probe",
+      "a": 1185589931,
+      "b": 3221225469,
+      "actual": 3109377359,
+      "expected": 3109377360
+    },
+    {
+      "check": "t32_mul",
+      "case": 812,
+      "kind": "tie_probe",
+      "a": 1073741827,
+      "b": 3109377365,
+      "actual": 3109377359,
+      "expected": 3109377360
+    },
+    {
+      "check": "t32_mul",
+      "case": 813,
+      "kind": "tie_probe",
+      "a": 3109377365,
+      "b": 1073741827,
+      "actual": 3109377359,
+      "expected": 3109377360
+    },
+    {
+      "check": "t32_mul",
+      "case": 814,
+      "kind": "tie_probe",
+      "a": 3221225469,
+      "b": 3109377365,
+      "actual": 1185589937,
+      "expected": 1185589936
+    },
+    {
+      "check": "t32_mul",
+      "case": 815,
+      "kind": "tie_probe",
+      "a": 3109377365,
+      "b": 3221225469,
+      "actual": 1185589937,
+      "expected": 1185589936
+    },
+    {
+      "check": "t32_mul",
+      "case": 832,
+      "kind": "tie_probe",
+      "a": 1073741829,
+      "b": 1087163597,
+      "actual": 1087163603,
+      "expected": 1087163602
+    },
+    {
+      "check": "t32_mul",
+      "case": 833,
+      "kind": "tie_probe",
+      "a": 1087163597,
+      "b": 1073741829,
+      "actual": 1087163603,
+      "expected": 1087163602
+    },
+    {
+      "check": "t32_mul",
+      "case": 834,
+      "kind": "tie_probe",
+      "a": 3221225467,
+      "b": 1087163597,
+      "actual": 3207803693,
+      "expected": 3207803694
+    },
+    {
+      "check": "t32_mul",
+      "case": 835,
+      "kind": "tie_probe",
+      "a": 1087163597,
+      "b": 3221225467,
+      "actual": 3207803693,
+      "expected": 3207803694
+    },
+    {
+      "check": "t32_mul",
+      "case": 836,
+      "kind": "tie_probe",
+      "a": 1073741829,
+      "b": 3207803699,
+      "actual": 3207803693,
+      "expected": 3207803694
+    },
+    {
+      "check": "t32_mul",
+      "case": 837,
+      "kind": "tie_probe",
+      "a": 3207803699,
+      "b": 1073741829,
+      "actual": 3207803693,
+      "expected": 3207803694
+    },
+    {
+      "check": "t32_mul",
+      "case": 838,
+      "kind": "tie_probe",
+      "a": 3221225467,
+      "b": 3207803699,
+      "actual": 1087163603,
+      "expected": 1087163602
+    },
+    {
+      "check": "t32_mul",
+      "case": 839,
+      "kind": "tie_probe",
+      "a": 3207803699,
+      "b": 3221225467,
+      "actual": 1087163603,
+      "expected": 1087163602
+    },
+    {
+      "check": "t32_mul",
+      "case": 856,
+      "kind": "tie_probe",
+      "a": 1073741831,
+      "b": 1121676727,
+      "actual": 1121676737,
+      "expected": 1121676736
+    },
+    {
+      "check": "t32_mul",
+      "case": 857,
+      "kind": "tie_probe",
+      "a": 1121676727,
+      "b": 1073741831,
+      "actual": 1121676737,
+      "expected": 1121676736
+    },
+    {
+      "check": "t32_mul",
+      "case": 858,
+      "kind": "tie_probe",
+      "a": 3221225465,
+      "b": 1121676727,
+      "actual": 3173290559,
+      "expected": 3173290560
+    },
+    {
+      "check": "t32_mul",
+      "case": 859,
+      "kind": "tie_probe",
+      "a": 1121676727,
+      "b": 3221225465,
+      "actual": 3173290559,
+      "expected": 3173290560
+    },
+    {
+      "check": "t32_mul",
+      "case": 860,
+      "kind": "tie_probe",
+      "a": 1073741831,
+      "b": 3173290569,
+      "actual": 3173290559,
+      "expected": 3173290560
+    },
+    {
+      "check": "t32_mul",
+      "case": 861,
+      "kind": "tie_probe",
+      "a": 3173290569,
+      "b": 1073741831,
+      "actual": 3173290559,
+      "expected": 3173290560
+    },
+    {
+      "check": "t32_mul",
+      "case": 862,
+      "kind": "tie_probe",
+      "a": 3221225465,
+      "b": 3173290569,
+      "actual": 1121676737,
+      "expected": 1121676736
+    },
+    {
+      "check": "t32_mul",
+      "case": 863,
+      "kind": "tie_probe",
+      "a": 3173290569,
+      "b": 3221225465,
+      "actual": 1121676737,
+      "expected": 1121676736
+    },
+    {
+      "check": "t32_mul",
+      "case": 864,
+      "kind": "tie_probe",
+      "a": 1073741833,
+      "b": 1125937607,
+      "actual": 1125937619,
+      "expected": 1125937620
+    },
+    {
+      "check": "t32_mul",
+      "case": 865,
+      "kind": "tie_probe",
+      "a": 1125937607,
+      "b": 1073741833,
+      "actual": 1125937619,
+      "expected": 1125937620
+    },
+    {
+      "check": "t32_mul",
+      "case": 866,
+      "kind": "tie_probe",
+      "a": 3221225463,
+      "b": 1125937607,
+      "actual": 3169029677,
+      "expected": 3169029676
+    },
+    {
+      "check": "t32_mul",
+      "case": 867,
+      "kind": "tie_probe",
+      "a": 1125937607,
+      "b": 3221225463,
+      "actual": 3169029677,
+      "expected": 3169029676
+    },
+    {
+      "check": "t32_mul",
+      "case": 868,
+      "kind": "tie_probe",
+      "a": 1073741833,
+      "b": 3169029689,
+      "actual": 3169029677,
+      "expected": 3169029676
+    },
+    {
+      "check": "t32_mul",
+      "case": 869,
+      "kind": "tie_probe",
+      "a": 3169029689,
+      "b": 1073741833,
+      "actual": 3169029677,
+      "expected": 3169029676
+    },
+    {
+      "check": "t32_mul",
+      "case": 870,
+      "kind": "tie_probe",
+      "a": 3221225463,
+      "b": 3169029689,
+      "actual": 1125937619,
+      "expected": 1125937620
+    },
+    {
+      "check": "t32_mul",
+      "case": 871,
+      "kind": "tie_probe",
+      "a": 3169029689,
+      "b": 3221225463,
+      "actual": 1125937619,
+      "expected": 1125937620
+    },
+    {
+      "check": "t32_mul",
+      "case": 904,
+      "kind": "tie_probe",
+      "a": 1073741835,
+      "b": 1177455523,
+      "actual": 1177455543,
+      "expected": 1177455542
+    },
+    {
+      "check": "t32_mul",
+      "case": 905,
+      "kind": "tie_probe",
+      "a": 1177455523,
+      "b": 1073741835,
+      "actual": 1177455543,
+      "expected": 1177455542
+    },
+    {
+      "check": "t32_mul",
+      "case": 906,
+      "kind": "tie_probe",
+      "a": 3221225461,
+      "b": 1177455523,
+      "actual": 3117511753,
+      "expected": 3117511754
+    },
+    {
+      "check": "t32_mul",
+      "case": 907,
+      "kind": "tie_probe",
+      "a": 1177455523,
+      "b": 3221225461,
+      "actual": 3117511753,
+      "expected": 3117511754
+    },
+    {
+      "check": "t32_mul",
+      "case": 908,
+      "kind": "tie_probe",
+      "a": 1073741835,
+      "b": 3117511773,
+      "actual": 3117511753,
+      "expected": 3117511754
+    },
+    {
+      "check": "t32_mul",
+      "case": 909,
+      "kind": "tie_probe",
+      "a": 3117511773,
+      "b": 1073741835,
+      "actual": 3117511753,
+      "expected": 3117511754
+    },
+    {
+      "check": "t32_mul",
+      "case": 910,
+      "kind": "tie_probe",
+      "a": 3221225461,
+      "b": 3117511773,
+      "actual": 1177455543,
+      "expected": 1177455542
+    },
+    {
+      "check": "t32_mul",
+      "case": 911,
+      "kind": "tie_probe",
+      "a": 3117511773,
+      "b": 3221225461,
+      "actual": 1177455543,
+      "expected": 1177455542
+    },
+    {
+      "check": "t32_mul",
+      "case": 912,
+      "kind": "tie_probe",
+      "a": 1073741837,
+      "b": 1192472891,
+      "actual": 1192472915,
+      "expected": 1192472916
+    },
+    {
+      "check": "t32_mul",
+      "case": 913,
+      "kind": "tie_probe",
+      "a": 1192472891,
+      "b": 1073741837,
+      "actual": 1192472915,
+      "expected": 1192472916
+    },
+    {
+      "check": "t32_mul",
+      "case": 914,
+      "kind": "tie_probe",
+      "a": 3221225459,
+      "b": 1192472891,
+      "actual": 3102494381,
+      "expected": 3102494380
+    },
+    {
+      "check": "t32_mul",
+      "case": 915,
+      "kind": "tie_probe",
+      "a": 1192472891,
+      "b": 3221225459,
+      "actual": 3102494381,
+      "expected": 3102494380
+    },
+    {
+      "check": "t32_mul",
+      "case": 916,
+      "kind": "tie_probe",
+      "a": 1073741837,
+      "b": 3102494405,
+      "actual": 3102494381,
+      "expected": 3102494380
+    },
+    {
+      "check": "t32_mul",
+      "case": 917,
+      "kind": "tie_probe",
+      "a": 3102494405,
+      "b": 1073741837,
+      "actual": 3102494381,
+      "expected": 3102494380
+    },
+    {
+      "check": "t32_mul",
+      "case": 918,
+      "kind": "tie_probe",
+      "a": 3221225459,
+      "b": 3102494405,
+      "actual": 1192472915,
+      "expected": 1192472916
+    },
+    {
+      "check": "t32_mul",
+      "case": 919,
+      "kind": "tie_probe",
+      "a": 3102494405,
+      "b": 3221225459,
+      "actual": 1192472915,
+      "expected": 1192472916
+    },
+    {
+      "check": "t32_mul",
+      "case": 936,
+      "kind": "tie_probe",
+      "a": 1073741839,
+      "b": 1158746385,
+      "actual": 1158746409,
+      "expected": 1158746410
+    },
+    {
+      "check": "t32_mul",
+      "case": 937,
+      "kind": "tie_probe",
+      "a": 1158746385,
+      "b": 1073741839,
+      "actual": 1158746409,
+      "expected": 1158746410
+    },
+    {
+      "check": "t32_mul",
+      "case": 938,
+      "kind": "tie_probe",
+      "a": 3221225457,
+      "b": 1158746385,
+      "actual": 3136220887,
+      "expected": 3136220886
+    },
+    {
+      "check": "t32_mul",
+      "case": 939,
+      "kind": "tie_probe",
+      "a": 1158746385,
+      "b": 3221225457,
+      "actual": 3136220887,
+      "expected": 3136220886
+    },
+    {
+      "check": "t32_mul",
+      "case": 940,
+      "kind": "tie_probe",
+      "a": 1073741839,
+      "b": 3136220911,
+      "actual": 3136220887,
+      "expected": 3136220886
+    },
+    {
+      "check": "t32_mul",
+      "case": 941,
+      "kind": "tie_probe",
+      "a": 3136220911,
+      "b": 1073741839,
+      "actual": 3136220887,
+      "expected": 3136220886
+    },
+    {
+      "check": "t32_mul",
+      "case": 942,
+      "kind": "tie_probe",
+      "a": 3221225457,
+      "b": 3136220911,
+      "actual": 1158746409,
+      "expected": 1158746410
+    },
+    {
+      "check": "t32_mul",
+      "case": 943,
+      "kind": "tie_probe",
+      "a": 3136220911,
+      "b": 3221225457,
+      "actual": 1158746409,
+      "expected": 1158746410
+    },
+    {
+      "check": "t32_mul",
+      "case": 976,
+      "kind": "tie_probe",
+      "a": 1073741841,
+      "b": 1156641009,
+      "actual": 1156641037,
+      "expected": 1156641036
+    },
+    {
+      "check": "t32_mul",
+      "case": 977,
+      "kind": "tie_probe",
+      "a": 1156641009,
+      "b": 1073741841,
+      "actual": 1156641037,
+      "expected": 1156641036
+    },
+    {
+      "check": "t32_mul",
+      "case": 978,
+      "kind": "tie_probe",
+      "a": 3221225455,
+      "b": 1156641009,
+      "actual": 3138326259,
+      "expected": 3138326260
+    },
+    {
+      "check": "t32_mul",
+      "case": 979,
+      "kind": "tie_probe",
+      "a": 1156641009,
+      "b": 3221225455,
+      "actual": 3138326259,
+      "expected": 3138326260
+    },
+    {
+      "check": "t32_mul",
+      "case": 980,
+      "kind": "tie_probe",
+      "a": 1073741841,
+      "b": 3138326287,
+      "actual": 3138326259,
+      "expected": 3138326260
+    },
+    {
+      "check": "t32_mul",
+      "case": 981,
+      "kind": "tie_probe",
+      "a": 3138326287,
+      "b": 1073741841,
+      "actual": 3138326259,
+      "expected": 3138326260
+    },
+    {
+      "check": "t32_mul",
+      "case": 982,
+      "kind": "tie_probe",
+      "a": 3221225455,
+      "b": 3138326287,
+      "actual": 1156641037,
+      "expected": 1156641036
+    },
+    {
+      "check": "t32_mul",
+      "case": 983,
+      "kind": "tie_probe",
+      "a": 3138326287,
+      "b": 3221225455,
+      "actual": 1156641037,
+      "expected": 1156641036
+    },
+    {
+      "check": "t32_mul",
+      "case": 1000,
+      "kind": "tie_probe",
+      "a": 1073741843,
+      "b": 1147914779,
+      "actual": 1147914809,
+      "expected": 1147914808
+    },
+    {
+      "check": "t32_mul",
+      "case": 1001,
+      "kind": "tie_probe",
+      "a": 1147914779,
+      "b": 1073741843,
+      "actual": 1147914809,
+      "expected": 1147914808
+    },
+    {
+      "check": "t32_mul",
+      "case": 1002,
+      "kind": "tie_probe",
+      "a": 3221225453,
+      "b": 1147914779,
+      "actual": 3147052487,
+      "expected": 3147052488
+    },
+    {
+      "check": "t32_mul",
+      "case": 1003,
+      "kind": "tie_probe",
+      "a": 1147914779,
+      "b": 3221225453,
+      "actual": 3147052487,
+      "expected": 3147052488
+    },
+    {
+      "check": "t32_mul",
+      "case": 1004,
+      "kind": "tie_probe",
+      "a": 1073741843,
+      "b": 3147052517,
+      "actual": 3147052487,
+      "expected": 3147052488
+    },
+    {
+      "check": "t32_mul",
+      "case": 1005,
+      "kind": "tie_probe",
+      "a": 3147052517,
+      "b": 1073741843,
+      "actual": 3147052487,
+      "expected": 3147052488
+    },
+    {
+      "check": "t32_mul",
+      "case": 1006,
+      "kind": "tie_probe",
+      "a": 3221225453,
+      "b": 3147052517,
+      "actual": 1147914809,
+      "expected": 1147914808
+    },
+    {
+      "check": "t32_mul",
+      "case": 1007,
+      "kind": "tie_probe",
+      "a": 3147052517,
+      "b": 3221225453,
+      "actual": 1147914809,
+      "expected": 1147914808
+    },
+    {
+      "check": "t32_mul",
+      "case": 1024,
+      "kind": "tie_probe",
+      "a": 1073741845,
+      "b": 1089720125,
+      "actual": 1089720149,
+      "expected": 1089720148
+    },
+    {
+      "check": "t32_mul",
+      "case": 1025,
+      "kind": "tie_probe",
+      "a": 1089720125,
+      "b": 1073741845,
+      "actual": 1089720149,
+      "expected": 1089720148
+    },
+    {
+      "check": "t32_mul",
+      "case": 1026,
+      "kind": "tie_probe",
+      "a": 3221225451,
+      "b": 1089720125,
+      "actual": 3205247147,
+      "expected": 3205247148
+    },
+    {
+      "check": "t32_mul",
+      "case": 1027,
+      "kind": "tie_probe",
+      "a": 1089720125,
+      "b": 3221225451,
+      "actual": 3205247147,
+      "expected": 3205247148
+    },
+    {
+      "check": "t32_mul",
+      "case": 1028,
+      "kind": "tie_probe",
+      "a": 1073741845,
+      "b": 3205247171,
+      "actual": 3205247147,
+      "expected": 3205247148
+    },
+    {
+      "check": "t32_mul",
+      "case": 1029,
+      "kind": "tie_probe",
+      "a": 3205247171,
+      "b": 1073741845,
+      "actual": 3205247147,
+      "expected": 3205247148
+    },
+    {
+      "check": "t32_mul",
+      "case": 1030,
+      "kind": "tie_probe",
+      "a": 3221225451,
+      "b": 3205247171,
+      "actual": 1089720149,
+      "expected": 1089720148
+    },
+    {
+      "check": "t32_mul",
+      "case": 1031,
+      "kind": "tie_probe",
+      "a": 3205247171,
+      "b": 3221225451,
+      "actual": 1089720149,
+      "expected": 1089720148
+    },
+    {
+      "check": "t32_mul",
+      "case": 1048,
+      "kind": "tie_probe",
+      "a": 1073741847,
+      "b": 1170028455,
+      "actual": 1170028495,
+      "expected": 1170028494
+    },
+    {
+      "check": "t32_mul",
+      "case": 1049,
+      "kind": "tie_probe",
+      "a": 1170028455,
+      "b": 1073741847,
+      "actual": 1170028495,
+      "expected": 1170028494
+    },
+    {
+      "check": "t32_mul",
+      "case": 1050,
+      "kind": "tie_probe",
+      "a": 3221225449,
+      "b": 1170028455,
+      "actual": 3124938801,
+      "expected": 3124938802
+    },
+    {
+      "check": "t32_mul",
+      "case": 1051,
+      "kind": "tie_probe",
+      "a": 1170028455,
+      "b": 3221225449,
+      "actual": 3124938801,
+      "expected": 3124938802
+    },
+    {
+      "check": "t32_mul",
+      "case": 1052,
+      "kind": "tie_probe",
+      "a": 1073741847,
+      "b": 3124938841,
+      "actual": 3124938801,
+      "expected": 3124938802
+    },
+    {
+      "check": "t32_mul",
+      "case": 1053,
+      "kind": "tie_probe",
+      "a": 3124938841,
+      "b": 1073741847,
+      "actual": 3124938801,
+      "expected": 3124938802
+    },
+    {
+      "check": "t32_mul",
+      "case": 1054,
+      "kind": "tie_probe",
+      "a": 3221225449,
+      "b": 3124938841,
+      "actual": 1170028495,
+      "expected": 1170028494
+    },
+    {
+      "check": "t32_mul",
+      "case": 1055,
+      "kind": "tie_probe",
+      "a": 3124938841,
+      "b": 3221225449,
+      "actual": 1170028495,
+      "expected": 1170028494
+    },
+    {
+      "check": "t32_mul",
+      "case": 1072,
+      "kind": "tie_probe",
+      "a": 1073741849,
+      "b": 1183800361,
+      "actual": 1183800407,
+      "expected": 1183800406
+    },
+    {
+      "check": "t32_mul",
+      "case": 1073,
+      "kind": "tie_probe",
+      "a": 1183800361,
+      "b": 1073741849,
+      "actual": 1183800407,
+      "expected": 1183800406
+    },
+    {
+      "check": "t32_mul",
+      "case": 1074,
+      "kind": "tie_probe",
+      "a": 3221225447,
+      "b": 1183800361,
+      "actual": 3111166889,
+      "expected": 3111166890
+    },
+    {
+      "check": "t32_mul",
+      "case": 1075,
+      "kind": "tie_probe",
+      "a": 1183800361,
+      "b": 3221225447,
+      "actual": 3111166889,
+      "expected": 3111166890
+    },
+    {
+      "check": "t32_mul",
+      "case": 1076,
+      "kind": "tie_probe",
+      "a": 1073741849,
+      "b": 3111166935,
+      "actual": 3111166889,
+      "expected": 3111166890
+    },
+    {
+      "check": "t32_mul",
+      "case": 1077,
+      "kind": "tie_probe",
+      "a": 3111166935,
+      "b": 1073741849,
+      "actual": 3111166889,
+      "expected": 3111166890
+    },
+    {
+      "check": "t32_mul",
+      "case": 1078,
+      "kind": "tie_probe",
+      "a": 3221225447,
+      "b": 3111166935,
+      "actual": 1183800407,
+      "expected": 1183800406
+    },
+    {
+      "check": "t32_mul",
+      "case": 1079,
+      "kind": "tie_probe",
+      "a": 3111166935,
+      "b": 3221225447,
+      "actual": 1183800407,
+      "expected": 1183800406
+    },
+    {
+      "check": "t32_mul",
+      "case": 1096,
+      "kind": "tie_probe",
+      "a": 1073741851,
+      "b": 1145821715,
+      "actual": 1145821757,
+      "expected": 1145821756
+    },
+    {
+      "check": "t32_mul",
+      "case": 1097,
+      "kind": "tie_probe",
+      "a": 1145821715,
+      "b": 1073741851,
+      "actual": 1145821757,
+      "expected": 1145821756
+    },
+    {
+      "check": "t32_mul",
+      "case": 1098,
+      "kind": "tie_probe",
+      "a": 3221225445,
+      "b": 1145821715,
+      "actual": 3149145539,
+      "expected": 3149145540
+    },
+    {
+      "check": "t32_mul",
+      "case": 1099,
+      "kind": "tie_probe",
+      "a": 1145821715,
+      "b": 3221225445,
+      "actual": 3149145539,
+      "expected": 3149145540
+    },
+    {
+      "check": "t32_mul",
+      "case": 1100,
+      "kind": "tie_probe",
+      "a": 1073741851,
+      "b": 3149145581,
+      "actual": 3149145539,
+      "expected": 3149145540
+    },
+    {
+      "check": "t32_mul",
+      "case": 1101,
+      "kind": "tie_probe",
+      "a": 3149145581,
+      "b": 1073741851,
+      "actual": 3149145539,
+      "expected": 3149145540
+    },
+    {
+      "check": "t32_mul",
+      "case": 1102,
+      "kind": "tie_probe",
+      "a": 3221225445,
+      "b": 3149145581,
+      "actual": 1145821757,
+      "expected": 1145821756
+    },
+    {
+      "check": "t32_mul",
+      "case": 1103,
+      "kind": "tie_probe",
+      "a": 3149145581,
+      "b": 3221225445,
+      "actual": 1145821757,
+      "expected": 1145821756
+    },
+    {
+      "check": "t32_mul",
+      "case": 1120,
+      "kind": "tie_probe",
+      "a": 1073741853,
+      "b": 1131594293,
+      "actual": 1131594335,
+      "expected": 1131594334
+    },
+    {
+      "check": "t32_mul",
+      "case": 1121,
+      "kind": "tie_probe",
+      "a": 1131594293,
+      "b": 1073741853,
+      "actual": 1131594335,
+      "expected": 1131594334
+    },
+    {
+      "check": "t32_mul",
+      "case": 1122,
+      "kind": "tie_probe",
+      "a": 3221225443,
+      "b": 1131594293,
+      "actual": 3163372961,
+      "expected": 3163372962
+    },
+    {
+      "check": "t32_mul",
+      "case": 1123,
+      "kind": "tie_probe",
+      "a": 1131594293,
+      "b": 3221225443,
+      "actual": 3163372961,
+      "expected": 3163372962
+    },
+    {
+      "check": "t32_mul",
+      "case": 1124,
+      "kind": "tie_probe",
+      "a": 1073741853,
+      "b": 3163373003,
+      "actual": 3163372961,
+      "expected": 3163372962
+    },
+    {
+      "check": "t32_mul",
+      "case": 1125,
+      "kind": "tie_probe",
+      "a": 3163373003,
+      "b": 1073741853,
+      "actual": 3163372961,
+      "expected": 3163372962
+    },
+    {
+      "check": "t32_mul",
+      "case": 1126,
+      "kind": "tie_probe",
+      "a": 3221225443,
+      "b": 3163373003,
+      "actual": 1131594335,
+      "expected": 1131594334
+    },
+    {
+      "check": "t32_mul",
+      "case": 1127,
+      "kind": "tie_probe",
+      "a": 3163373003,
+      "b": 3221225443,
+      "actual": 1131594335,
+      "expected": 1131594334
+    },
+    {
+      "check": "t32_mul",
+      "case": 1128,
+      "kind": "tie_probe",
+      "a": 1073741855,
+      "b": 1175487521,
+      "actual": 1175487575,
+      "expected": 1175487576
+    },
+    {
+      "check": "t32_mul",
+      "case": 1129,
+      "kind": "tie_probe",
+      "a": 1175487521,
+      "b": 1073741855,
+      "actual": 1175487575,
+      "expected": 1175487576
+    },
+    {
+      "check": "t32_mul",
+      "case": 1130,
+      "kind": "tie_probe",
+      "a": 3221225441,
+      "b": 1175487521,
+      "actual": 3119479721,
+      "expected": 3119479720
+    },
+    {
+      "check": "t32_mul",
+      "case": 1131,
+      "kind": "tie_probe",
+      "a": 1175487521,
+      "b": 3221225441,
+      "actual": 3119479721,
+      "expected": 3119479720
+    },
+    {
+      "check": "t32_mul",
+      "case": 1132,
+      "kind": "tie_probe",
+      "a": 1073741855,
+      "b": 3119479775,
+      "actual": 3119479721,
+      "expected": 3119479720
+    },
+    {
+      "check": "t32_mul",
+      "case": 1133,
+      "kind": "tie_probe",
+      "a": 3119479775,
+      "b": 1073741855,
+      "actual": 3119479721,
+      "expected": 3119479720
+    },
+    {
+      "check": "t32_mul",
+      "case": 1134,
+      "kind": "tie_probe",
+      "a": 3221225441,
+      "b": 3119479775,
+      "actual": 1175487575,
+      "expected": 1175487576
+    },
+    {
+      "check": "t32_mul",
+      "case": 1135,
+      "kind": "tie_probe",
+      "a": 3119479775,
+      "b": 3221225441,
+      "actual": 1175487575,
+      "expected": 1175487576
+    }
+  ],
+  "analysis_note": "Every listed discrepancy is checked with exact Fraction distances using external hexadecimal input values and the closed-form T32 grid in magnitude [1,2); no Takum encoder/decoder is called by this proof.",
+  "analysis_document": "docs/evidencias/wide_reference_notes.md"
+}

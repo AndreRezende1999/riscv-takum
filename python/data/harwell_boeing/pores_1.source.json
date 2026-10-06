@@ -1,0 +1,13 @@
+{
+  "collection": "NIST Matrix Market / Harwell-Boeing",
+  "name": "pores_1",
+  "source_author": "John Appleyard, Harwell Laboratory",
+  "domain": "reservoir modelling",
+  "retrieved": "2026-10-06",
+  "pilot_already_observed": false,
+  "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/pores/pores_1.html",
+  "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/pores/pores_1.mtx.gz",
+  "sha256": "06cdf9fcc9c9dd25d8232e64400feadb6c087437299a991decb4fd17b6077a85",
+  "archive_sha256": "56c6c013f49b7e91c3e30612121a3c4139b3eb2988f92d3b5af2830d616ba8a7",
+  "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+}

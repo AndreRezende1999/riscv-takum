@@ -1,0 +1,81 @@
+{
+  "schema": 1,
+  "python": "3.12.14",
+  "reference": "binary128; separate multiply/add; ties-even",
+  "input_semantics": "exact decimal Matrix Market values; sorted CSR; duplicates summed exactly",
+  "takum_variant": "linear",
+  "rounding": "nearest code, ties-even; finite nonzero saturation",
+  "fp8_policy": "OCP layout; nonsaturating conversion/arithmetic; nonfinite is failure",
+  "accumulation": "2x storage width; separately rounded products and sums; output in storage format",
+  "control": "same-width accumulator; exact rational dot on quantized inputs",
+  "input_effect_metric": "exact dot of quantized inputs versus exact dot of original inputs",
+  "seed": 2026,
+  "vector_policy": "ones",
+  "vlen": 256,
+  "lmul": 1,
+  "counter_scope": "Takum vector subset only; host CSR loops/addressing/seed excluded from instruction count; no cycles",
+  "sample_claim": "engineering checks only; no claim of representative SuiteSparse coverage",
+  "inputs": [
+    {
+      "matrix_id": "cancellation:0d2abfe98951",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\examples\\cancellation.mtx",
+      "sha256": "0d2abfe9895115310ba8eceafd1417ef4d52db73d51ed47d33101d4d7f10dad4",
+      "rows": 3,
+      "cols": 3,
+      "metadata": {
+        "field": "real",
+        "symmetry": "general",
+        "declared_entries": 5,
+        "expanded_entries": 5,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 5,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\examples\\cancellation.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "0",
+        "absolute_l2": "0",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      }
+    },
+    {
+      "matrix_id": "dynamic_range:8485581503bb",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\examples\\dynamic_range.mtx",
+      "sha256": "8485581503bbcc142f92278c4f2cdbcea5abdb51eb83f7449c809bae1ed5a96b",
+      "rows": 4,
+      "cols": 4,
+      "metadata": {
+        "field": "real",
+        "symmetry": "general",
+        "declared_entries": 7,
+        "expanded_entries": 7,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 7,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\examples\\dynamic_range.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "1.0747376921803771501474501570986222821773917359620E-37",
+        "absolute_l2": "4.8148248609680896326605768237502309692860933417804E-35",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      }
+    }
+  ],
+  "code_sha256": {
+    "__init__.py": "9fa5092d99a0993c3c4802881edb4b378baf0a4e954beea979b8ea4342ef410f",
+    "__main__.py": "b0c6c51d378f9b6b2a5af533ffb28451c14321ca5fbc8b9d24650a55f3918273",
+    "benchmark.py": "8decc80b38530b504539e818e4c8ee50dd27196c19f8944b22f0bb25be237af8",
+    "binary.py": "fe54f5b57bf726e35adc4a2ed87c33d1616b398b5b263dba8f18e464f0db9660",
+    "codec.py": "3aaae444b7b4ea56b374b99a27596e4976f7b6e7dcd1e3b49b3fba6e2d799752",
+    "sparse.py": "36cff5267ae052525f55ab21a950f61e8ce883e402474772365d8bdc0873f8df",
+    "vector.py": "008023bf5e361a010e5843e908e764bc0ce6abc65acdbf3f243b179ceb48607f"
+  }
+}
