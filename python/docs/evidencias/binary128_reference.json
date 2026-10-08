@@ -1,0 +1,143 @@
+{
+  "schema": 1,
+  "oracle": {
+    "abi_one": "3fff0000000000000000000000000000",
+    "architecture": "x86_64",
+    "compiler": "GCC 9.4.0",
+    "contract": "separate volatile add/sub/mul; decimal strtoflt128",
+    "fast_math": false,
+    "float128_bytes": 16,
+    "mantissa_bits": 113,
+    "max_exponent": 16384,
+    "min_exponent": -16381,
+    "provenance": {
+      "generated_utc": "2026-10-06T11:14:43.106198+00:00",
+      "generator_sha256": "797747d17345a743bbe89bb06ee893a7b1e84f973b23db33b7617a8952ddb397",
+      "harness_sha256": "07a9ace0e443e6c8120027b9b18e86ca4460b551cc3f273e75463f64407a5be5",
+      "operator_declared_build_command": "gcc -std=gnu11 -O2 -fno-fast-math -frounding-math -ffp-contract=off tools/binary128_reference.c -lquadmath -lm -o tmp/binary128-reference/binary128_reference",
+      "oracle_argv": [
+        "wsl",
+        "-d",
+        "Ubuntu-20.04",
+        "--exec",
+        "tmp/binary128-reference/binary128_reference"
+      ],
+      "oracle_stderr": "",
+      "request_sha256": "7cfc36a9f9d0e8064c7a5dc25796bf3535cdd35adbac37578ca632add2d3d223",
+      "requested_pairs": 2000,
+      "seed": 20261006
+    },
+    "rounding": "FE_TONEAREST",
+    "schema": 1,
+    "type": "metadata"
+  },
+  "fixture_sha256": "e24497d2bff25d2ca2d47941c8029234aa2651605321e7cb466d4510ccb5105b",
+  "python": "3.12.14",
+  "python_binary_sha256": "fe54f5b57bf726e35adc4a2ed87c33d1616b398b5b263dba8f18e464f0db9660",
+  "pair_count": 2000,
+  "category_counts": {
+    "anchors": 27,
+    "uniform": 329,
+    "near_one": 329,
+    "exponent_extremes": 329,
+    "subnormal": 329,
+    "cancellation": 329,
+    "rounding_boundary": 328,
+    "decimal_anchor": 17
+  },
+  "comparison_contract": "Raw finite values must match; signed zeros and nonfinite kinds/payloads are separately classified under Fraction/None semantics.",
+  "checks": {
+    "add": {
+      "cases": 2000,
+      "mismatches": 0,
+      "classifications": {
+        "exact": 1999,
+        "signed_zero_difference": 1,
+        "nonfinite_kind_difference": 0,
+        "nan_payload_or_sign_difference": 0,
+        "infinity_sign_difference": 0,
+        "mismatch": 0
+      },
+      "first_mismatches": [],
+      "first_contract_differences": [
+        {
+          "id": 1,
+          "category": "anchors",
+          "actual": "00000000000000000000000000000000",
+          "expected": "80000000000000000000000000000000",
+          "classification": "signed_zero_difference"
+        }
+      ],
+      "oracle_nonfinite": 15
+    },
+    "sub": {
+      "cases": 2000,
+      "mismatches": 0,
+      "classifications": {
+        "exact": 2000,
+        "signed_zero_difference": 0,
+        "nonfinite_kind_difference": 0,
+        "nan_payload_or_sign_difference": 0,
+        "infinity_sign_difference": 0,
+        "mismatch": 0
+      },
+      "first_mismatches": [],
+      "first_contract_differences": [],
+      "oracle_nonfinite": 16
+    },
+    "mul": {
+      "cases": 2000,
+      "mismatches": 0,
+      "classifications": {
+        "exact": 1998,
+        "signed_zero_difference": 2,
+        "nonfinite_kind_difference": 0,
+        "nan_payload_or_sign_difference": 0,
+        "infinity_sign_difference": 0,
+        "mismatch": 0
+      },
+      "first_mismatches": [],
+      "first_contract_differences": [
+        {
+          "id": 2,
+          "category": "anchors",
+          "actual": "00000000000000000000000000000000",
+          "expected": "80000000000000000000000000000000",
+          "classification": "signed_zero_difference"
+        },
+        {
+          "id": 3,
+          "category": "anchors",
+          "actual": "00000000000000000000000000000000",
+          "expected": "80000000000000000000000000000000",
+          "classification": "signed_zero_difference"
+        }
+      ],
+      "oracle_nonfinite": 188
+    },
+    "encode_decimal": {
+      "cases": 17,
+      "mismatches": 0,
+      "classifications": {
+        "exact": 17,
+        "signed_zero_difference": 0,
+        "nonfinite_kind_difference": 0,
+        "nan_payload_or_sign_difference": 0,
+        "infinity_sign_difference": 0,
+        "mismatch": 0
+      },
+      "first_mismatches": [],
+      "first_contract_differences": [],
+      "oracle_nonfinite": 2
+    }
+  },
+  "classification_totals": {
+    "exact": 6014,
+    "signed_zero_difference": 3,
+    "nonfinite_kind_difference": 0,
+    "nan_payload_or_sign_difference": 0,
+    "infinity_sign_difference": 0,
+    "mismatch": 0
+  },
+  "matches_all": true
+}

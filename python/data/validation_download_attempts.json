@@ -1,0 +1,38 @@
+[
+  {
+    "name": "bcsstk02",
+    "initial_error": "HTTPError: HTTP Error 403: Forbidden",
+    "retry_client": "PowerShell Invoke-WebRequest",
+    "success": true
+  },
+  {
+    "name": "west0132",
+    "initial_error": "HTTPError: HTTP Error 403: Forbidden",
+    "retry_client": "PowerShell Invoke-WebRequest",
+    "success": true
+  },
+  {
+    "name": "jpwh_991",
+    "initial_error": "HTTPError: HTTP Error 403: Forbidden",
+    "retry_client": "PowerShell Invoke-WebRequest",
+    "success": true
+  },
+  {
+    "name": "sherman1",
+    "initial_error": "HTTPError: HTTP Error 403: Forbidden",
+    "retry_client": "PowerShell Invoke-WebRequest",
+    "success": true
+  },
+  {
+    "name": "pores_1",
+    "initial_error": "HTTPError: HTTP Error 403: Forbidden",
+    "retry_client": "PowerShell Invoke-WebRequest",
+    "success": true
+  },
+  {
+    "name": "well1033",
+    "initial_error": "HTTPError: HTTP Error 403: Forbidden",
+    "retry_client": "PowerShell Invoke-WebRequest",
+    "success": true
+  }
+]

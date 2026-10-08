@@ -1,0 +1,80 @@
+Running none: 8 matrices, seven formats, seed=2026, VLEN=256
+Completed none: 56 results
+Running pow2-bound: 8 matrices, seven formats, seed=2026, VLEN=256
+Completed pow2-bound: 56 results
+{
+  "none": {
+    "takum_linear8": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "0.1752762036725492052032878574260147402221482125095155"
+    },
+    "takum_linear16": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "0.000487444562284316525384040533150639082188379070799085"
+    },
+    "takum_linear32": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "1.165581260799591494955595520858737796191745907815915E-8"
+    },
+    "E4M3": {
+      "total": 8,
+      "defined": 4,
+      "median_defined_only": "0.0392370179697329452749560969389277765390004872404065"
+    },
+    "E5M2": {
+      "total": 8,
+      "defined": 5,
+      "median_defined_only": "0.093548454198107078457101671255548549744461690184300"
+    },
+    "binary16": {
+      "total": 8,
+      "defined": 5,
+      "median_defined_only": "0.00028722152990566714661857652435624009497973931118363"
+    },
+    "binary32": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "3.9279159483751957579382381939259671422578256414553E-8"
+    }
+  },
+  "pow2-bound": {
+    "takum_linear8": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "0.110479586492533306793760152557747715516553256941635"
+    },
+    "takum_linear16": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "0.00034201911104014950671833900574548889638298342322461"
+    },
+    "takum_linear32": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "5.69809672229625801757776482237940181443837386636275E-9"
+    },
+    "E4M3": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "0.0409044224916945019541883731566037896568502274575325"
+    },
+    "E5M2": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "0.086044518221163227069741395003670564367689691710674"
+    },
+    "binary16": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "0.00029553270419799605485893754601802016865664319612187"
+    },
+    "binary32": {
+      "total": 8,
+      "defined": 8,
+      "median_defined_only": "3.9279159483751957579382381939259671422578256414553E-8"
+    }
+  }
+}

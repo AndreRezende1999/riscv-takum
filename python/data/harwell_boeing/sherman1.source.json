@@ -1,0 +1,13 @@
+{
+  "collection": "NIST Matrix Market / Harwell-Boeing",
+  "name": "sherman1",
+  "source_author": "Andy Sherman, Nolan and Associates",
+  "domain": "oil reservoir modelling",
+  "retrieved": "2026-10-06",
+  "pilot_already_observed": false,
+  "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/sherman/sherman1.html",
+  "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/sherman/sherman1.mtx.gz",
+  "sha256": "c1e51586b785ec8bc575193c855d4a9afd8c6e315835ea47937d2b78ec0e0476",
+  "archive_sha256": "36f6d76bbfec3c4465070e92171b05ed74fda5beb4a5a0910b2237ff6de6c2fd",
+  "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+}

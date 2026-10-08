@@ -1,0 +1,58 @@
+{
+  "takum_linear8": {
+    "total": 8,
+    "defined": 8,
+    "undefined": 0,
+    "nonfinite_results": 0,
+    "nonfinite_references": 0,
+    "zero_references": 0
+  },
+  "takum_linear16": {
+    "total": 8,
+    "defined": 8,
+    "undefined": 0,
+    "nonfinite_results": 0,
+    "nonfinite_references": 0,
+    "zero_references": 0
+  },
+  "takum_linear32": {
+    "total": 8,
+    "defined": 8,
+    "undefined": 0,
+    "nonfinite_results": 0,
+    "nonfinite_references": 0,
+    "zero_references": 0
+  },
+  "E4M3": {
+    "total": 8,
+    "defined": 4,
+    "undefined": 4,
+    "nonfinite_results": 4,
+    "nonfinite_references": 0,
+    "zero_references": 0
+  },
+  "E5M2": {
+    "total": 8,
+    "defined": 5,
+    "undefined": 3,
+    "nonfinite_results": 3,
+    "nonfinite_references": 0,
+    "zero_references": 0
+  },
+  "binary16": {
+    "total": 8,
+    "defined": 5,
+    "undefined": 3,
+    "nonfinite_results": 3,
+    "nonfinite_references": 0,
+    "zero_references": 0
+  },
+  "binary32": {
+    "total": 8,
+    "defined": 8,
+    "undefined": 0,
+    "nonfinite_results": 0,
+    "nonfinite_references": 0,
+    "zero_references": 0
+  }
+}

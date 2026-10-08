@@ -1,0 +1,365 @@
+{
+  "schema": 2,
+  "python": "3.12.14",
+  "reference": "binary128; separate multiply/add; ties-even",
+  "input_semantics": "exact decimal Matrix Market values; sorted CSR; duplicates summed exactly",
+  "takum_variant": "linear",
+  "rounding": "nearest code, ties-even; finite nonzero saturation",
+  "fp8_policy": "OCP layout; nonsaturating conversion/arithmetic; nonfinite is failure",
+  "accumulation": "2x storage width; separately rounded products and sums; output in storage format",
+  "control": "same-width accumulator; exact rational dot on quantized inputs",
+  "input_effect_metric": "exact dot of quantized inputs versus exact dot of original inputs",
+  "scaling": "pow2-bound",
+  "scale_cost": "two global exponents plus host pre/post-processing; excluded from vector counters",
+  "raw_output_semantics": "physical value = decode(raw) * matrix_scale * vector_scale",
+  "seed": 2026,
+  "vector_policy": "random",
+  "vlen": 256,
+  "lmul": 1,
+  "counter_scope": "Takum vector subset only; host CSR loops/addressing/seed excluded from instruction count; no cycles",
+  "sample_claim": "engineering checks only; no claim of representative SuiteSparse coverage",
+  "inputs": [
+    {
+      "matrix_id": "bcsstk01:90681443b885",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\bcsstk01.mtx",
+      "sha256": "90681443b885c9b8781354fa6bfeab8ecb8c53f0f7a4a8961cc4469eb6e2a187",
+      "rows": 48,
+      "cols": 48,
+      "metadata": {
+        "field": "real",
+        "symmetry": "symmetric",
+        "declared_entries": 224,
+        "expanded_entries": 400,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 400,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\bcsstk01.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "9.9156293599490043998578189783008265759503876082560E-35",
+        "absolute_l2": "3.6417797147396108247688707789388215229024073041988E-25",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      },
+      "matrix_scale": "4294967296",
+      "vector_scale": "1",
+      "provenance": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "bcsstk01",
+        "source_author": "John Lewis, Boeing Computer Services",
+        "domain": "structural engineering",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": true,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/bcsstruc1/bcsstk01.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk01.mtx.gz",
+        "sha256": "90681443b885c9b8781354fa6bfeab8ecb8c53f0f7a4a8961cc4469eb6e2a187",
+        "archive_sha256": "567560f75b952d9c14c0d193ded5d80370d7ca26fe49f9e67deee55f22e55699",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "matrix_id": "west0067:c2b90a218948",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\west0067.mtx",
+      "sha256": "c2b90a218948d55185f7068fa0c4dd9f5322a8321940830b1a303200b486b0fb",
+      "rows": 67,
+      "cols": 67,
+      "metadata": {
+        "field": "real",
+        "symmetry": "general",
+        "declared_entries": 294,
+        "expanded_entries": 294,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 294,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\west0067.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "1.0172231833382259021282203358744394518369002516627E-34",
+        "absolute_l2": "7.5719289218295422703967822064760251472362711019714E-34",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      },
+      "matrix_scale": "8",
+      "vector_scale": "1",
+      "provenance": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "west0067",
+        "source_author": "Art Westerberg, University of Pittsburgh",
+        "domain": "chemical engineering",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": true,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/chemwest/west0067.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/chemwest/west0067.mtx.gz",
+        "sha256": "c2b90a218948d55185f7068fa0c4dd9f5322a8321940830b1a303200b486b0fb",
+        "archive_sha256": "228c55ac4746e8be7bb7f7e03e590d7066cdfe9ba9c06616dd19c04104ff6adb",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "matrix_id": "bcsstk02:20bc89a0355e",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\bcsstk02.mtx",
+      "sha256": "20bc89a0355ebe9da3a02feafbae22370f0c9c5e6c4103559714b503885336a0",
+      "rows": 66,
+      "cols": 66,
+      "metadata": {
+        "field": "real",
+        "symmetry": "symmetric",
+        "declared_entries": 2211,
+        "expanded_entries": 4356,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 4356,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\bcsstk02.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "2.2522578391083214759091369044636842010941178343597E-34",
+        "absolute_l2": "6.0445756830204955822141956687552416955617906393696E-30",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      },
+      "matrix_scale": "32768",
+      "vector_scale": "1",
+      "provenance": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "bcsstk02",
+        "source_author": "John Lewis, Boeing Computer Services",
+        "domain": "structural engineering",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/bcsstruc1/bcsstk02.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk02.mtx.gz",
+        "sha256": "20bc89a0355ebe9da3a02feafbae22370f0c9c5e6c4103559714b503885336a0",
+        "archive_sha256": "cd27f10160c063ae16d07ec99efa61c02b83bb5689ef5009985194d2e59c238a",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "matrix_id": "west0132:0813939e9a16",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\west0132.mtx",
+      "sha256": "0813939e9a1673a1b52b878d6597932d6ea837ef7d05f30bdcd5bec7a6a0392b",
+      "rows": 132,
+      "cols": 132,
+      "metadata": {
+        "field": "real",
+        "symmetry": "general",
+        "declared_entries": 414,
+        "expanded_entries": 414,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 1,
+        "zero_entries_removed": 1,
+        "zero_sum_entries_removed": 0,
+        "nnz": 413,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\west0132.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "6.7677749446336736627752727996257409608952707935530E-35",
+        "absolute_l2": "1.3685205178711595646655096287548284337392191528993E-29",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      },
+      "matrix_scale": "524288",
+      "vector_scale": "1",
+      "provenance": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "west0132",
+        "source_author": "Art Westerberg, University of Pittsburgh",
+        "domain": "chemical engineering",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/chemwest/west0132.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/chemwest/west0132.mtx.gz",
+        "sha256": "0813939e9a1673a1b52b878d6597932d6ea837ef7d05f30bdcd5bec7a6a0392b",
+        "archive_sha256": "4af0c06f879623d9d41db89a1d9ffef47a7311169976349144c46036216e599d",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "matrix_id": "jpwh_991:b58fec585ed0",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\jpwh_991.mtx",
+      "sha256": "b58fec585ed0e7a324c1de56d28bd9900ffd2844c8f08db92516afe5c0f4d008",
+      "rows": 991,
+      "cols": 991,
+      "metadata": {
+        "field": "real",
+        "symmetry": "general",
+        "declared_entries": 6027,
+        "expanded_entries": 6027,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 6027,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\jpwh_991.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "9.2809123046897022942161375036954391090894307347802E-35",
+        "absolute_l2": "1.0571825284863878136218432336790150017468492233672E-32",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      },
+      "matrix_scale": "32",
+      "vector_scale": "1",
+      "provenance": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "jpwh_991",
+        "source_author": "J. P. Whelan, Philips Research Laboratories",
+        "domain": "circuit physics",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/cirphys/jpwh_991.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/cirphys/jpwh_991.mtx.gz",
+        "sha256": "b58fec585ed0e7a324c1de56d28bd9900ffd2844c8f08db92516afe5c0f4d008",
+        "archive_sha256": "5a8bee63ba8d4762297dba24ffc613e4edb64b682efc98404fcf9808ed5189b0",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "matrix_id": "sherman1:c1e51586b785",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\sherman1.mtx",
+      "sha256": "c1e51586b785ec8bc575193c855d4a9afd8c6e315835ea47937d2b78ec0e0476",
+      "rows": 1000,
+      "cols": 1000,
+      "metadata": {
+        "field": "real",
+        "symmetry": "general",
+        "declared_entries": 3750,
+        "expanded_entries": 3750,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 3750,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\sherman1.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "9.7634883495878344391207869905829213114600582570165E-35",
+        "absolute_l2": "2.4357243399076347517971330676742567708042907096411E-33",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      },
+      "matrix_scale": "8",
+      "vector_scale": "1",
+      "provenance": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "sherman1",
+        "source_author": "Andy Sherman, Nolan and Associates",
+        "domain": "oil reservoir modelling",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/sherman/sherman1.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/sherman/sherman1.mtx.gz",
+        "sha256": "c1e51586b785ec8bc575193c855d4a9afd8c6e315835ea47937d2b78ec0e0476",
+        "archive_sha256": "36f6d76bbfec3c4465070e92171b05ed74fda5beb4a5a0910b2237ff6de6c2fd",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "matrix_id": "pores_1:06cdf9fcc9c9",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\pores_1.mtx",
+      "sha256": "06cdf9fcc9c9dd25d8232e64400feadb6c087437299a991decb4fd17b6077a85",
+      "rows": 30,
+      "cols": 30,
+      "metadata": {
+        "field": "real",
+        "symmetry": "general",
+        "declared_entries": 180,
+        "expanded_entries": 180,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 180,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\pores_1.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "1.6643157806830248392642513027254709716139771861456E-34",
+        "absolute_l2": "3.6593363808792732669094853100986771214411237426984E-27",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      },
+      "matrix_scale": "67108864",
+      "vector_scale": "1",
+      "provenance": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "pores_1",
+        "source_author": "John Appleyard, Harwell Laboratory",
+        "domain": "reservoir modelling",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/pores/pores_1.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/pores/pores_1.mtx.gz",
+        "sha256": "06cdf9fcc9c9dd25d8232e64400feadb6c087437299a991decb4fd17b6077a85",
+        "archive_sha256": "56c6c013f49b7e91c3e30612121a3c4139b3eb2988f92d3b5af2830d616ba8a7",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "matrix_id": "well1033:9953cb6091a2",
+      "path": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\well1033.mtx",
+      "sha256": "9953cb6091a268afb6725bd92c26cdea68c8897b2d9a31a0656b0c0022e25f0c",
+      "rows": 1033,
+      "cols": 320,
+      "metadata": {
+        "field": "real",
+        "symmetry": "general",
+        "declared_entries": 4732,
+        "expanded_entries": 4732,
+        "duplicate_entries_merged": 0,
+        "explicit_zero_entries": 0,
+        "zero_entries_removed": 0,
+        "zero_sum_entries_removed": 0,
+        "nnz": 4732,
+        "source": "C:\\Users\\Isadora\\OneDrive\\Documentos\\ChatGPT\\AOC\\data\\harwell_boeing\\well1033.mtx"
+      },
+      "reference_vs_exact": {
+        "relative_l2": "8.6231763172356410256484290579247189344019217603992E-35",
+        "absolute_l2": "9.0069718922112539188507010683784178940471551002685E-34",
+        "nonfinite_count": 0,
+        "zero_reference": false,
+        "reference_nonfinite_count": 0
+      },
+      "matrix_scale": "4",
+      "vector_scale": "1",
+      "provenance": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "well1033",
+        "source_author": "Michael Saunders, Stanford University",
+        "domain": "surveying least squares",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/lsq/well1033.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/lsq/well1033.mtx.gz",
+        "sha256": "9953cb6091a268afb6725bd92c26cdea68c8897b2d9a31a0656b0c0022e25f0c",
+        "archive_sha256": "5489ac8433eb94f98e9f452c0501eb62df545070749e45636cdaf701df5f3444",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    }
+  ],
+  "code_sha256": {
+    "__init__.py": "9fa5092d99a0993c3c4802881edb4b378baf0a4e954beea979b8ea4342ef410f",
+    "__main__.py": "9eea33f68fd81d2d6be404af7a16e9a6fea1e9db7ae0643ec443a630ae59834f",
+    "benchmark.py": "df7aeb76866ed7e9ff86cacace91ae22b68ab7c6a7d5d0332c01ae89dc50089e",
+    "binary.py": "fe54f5b57bf726e35adc4a2ed87c33d1616b398b5b263dba8f18e464f0db9660",
+    "codec.py": "3aaae444b7b4ea56b374b99a27596e4976f7b6e7dcd1e3b49b3fba6e2d799752",
+    "scaling.py": "85a3c79050596b6cc4d13c8d6d9a336587b84be0b83f4b8a6a896dab33a75e38",
+    "sparse.py": "36cff5267ae052525f55ab21a950f61e8ce883e402474772365d8bdc0873f8df",
+    "vector.py": "008023bf5e361a010e5843e908e764bc0ce6abc65acdbf3f243b179ceb48607f"
+  },
+  "source_snapshot": {
+    "path": "source.zip",
+    "sha256": "6b9cc7c5d6b391d2cb7eae4be21c34dfdce5d81cee6d3519bbf51f41ed3091e0"
+  }
+}

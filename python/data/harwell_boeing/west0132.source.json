@@ -1,0 +1,13 @@
+{
+  "collection": "NIST Matrix Market / Harwell-Boeing",
+  "name": "west0132",
+  "source_author": "Art Westerberg, University of Pittsburgh",
+  "domain": "chemical engineering",
+  "retrieved": "2026-10-06",
+  "pilot_already_observed": false,
+  "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/chemwest/west0132.html",
+  "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/chemwest/west0132.mtx.gz",
+  "sha256": "0813939e9a1673a1b52b878d6597932d6ea837ef7d05f30bdcd5bec7a6a0392b",
+  "archive_sha256": "4af0c06f879623d9d41db89a1d9ffef47a7311169976349144c46036216e599d",
+  "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+}

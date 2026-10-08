@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "result_rows_checked": 112,
+  "vector_counter_sets_checked": 48,
+  "same_vectors": true,
+  "matrix_source_and_artifact_hashes_verified": true,
+  "counts_sha256": "014a8fc4ffc5e208e69d36e64f397e1c614bc58df4bc6f6fc05c90be4f0549c2",
+  "limits": "Integrity and accounting audit, not a repeat or independent proof of arithmetic."
+}

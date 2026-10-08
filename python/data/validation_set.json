@@ -1,0 +1,186 @@
+{
+  "protocol": "docs/08_plano_validacao_ampliada.md",
+  "protocol_sha256": "4d882d075480685345048f43c8f52c48e9b2dda19aa999d9e0bd7cb02e46d3fb",
+  "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems",
+  "requested": [
+    "bcsstk01",
+    "west0067",
+    "bcsstk02",
+    "west0132",
+    "jpwh_991",
+    "sherman1",
+    "pores_1",
+    "well1033"
+  ],
+  "matrices": [
+    {
+      "name": "bcsstk01",
+      "path": "data/harwell_boeing/bcsstk01.mtx",
+      "rows": 48,
+      "cols": 48,
+      "nnz": 400,
+      "sha256": "90681443b885c9b8781354fa6bfeab8ecb8c53f0f7a4a8961cc4469eb6e2a187",
+      "source": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "bcsstk01",
+        "source_author": "John Lewis, Boeing Computer Services",
+        "domain": "structural engineering",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": true,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/bcsstruc1/bcsstk01.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk01.mtx.gz",
+        "sha256": "90681443b885c9b8781354fa6bfeab8ecb8c53f0f7a4a8961cc4469eb6e2a187",
+        "archive_sha256": "567560f75b952d9c14c0d193ded5d80370d7ca26fe49f9e67deee55f22e55699",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "name": "west0067",
+      "path": "data/harwell_boeing/west0067.mtx",
+      "rows": 67,
+      "cols": 67,
+      "nnz": 294,
+      "sha256": "c2b90a218948d55185f7068fa0c4dd9f5322a8321940830b1a303200b486b0fb",
+      "source": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "west0067",
+        "source_author": "Art Westerberg, University of Pittsburgh",
+        "domain": "chemical engineering",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": true,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/chemwest/west0067.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/chemwest/west0067.mtx.gz",
+        "sha256": "c2b90a218948d55185f7068fa0c4dd9f5322a8321940830b1a303200b486b0fb",
+        "archive_sha256": "228c55ac4746e8be7bb7f7e03e590d7066cdfe9ba9c06616dd19c04104ff6adb",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "name": "bcsstk02",
+      "path": "data/harwell_boeing/bcsstk02.mtx",
+      "rows": 66,
+      "cols": 66,
+      "nnz": 4356,
+      "sha256": "20bc89a0355ebe9da3a02feafbae22370f0c9c5e6c4103559714b503885336a0",
+      "source": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "bcsstk02",
+        "source_author": "John Lewis, Boeing Computer Services",
+        "domain": "structural engineering",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/bcsstruc1/bcsstk02.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/bcsstruc1/bcsstk02.mtx.gz",
+        "sha256": "20bc89a0355ebe9da3a02feafbae22370f0c9c5e6c4103559714b503885336a0",
+        "archive_sha256": "cd27f10160c063ae16d07ec99efa61c02b83bb5689ef5009985194d2e59c238a",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "name": "west0132",
+      "path": "data/harwell_boeing/west0132.mtx",
+      "rows": 132,
+      "cols": 132,
+      "nnz": 413,
+      "sha256": "0813939e9a1673a1b52b878d6597932d6ea837ef7d05f30bdcd5bec7a6a0392b",
+      "source": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "west0132",
+        "source_author": "Art Westerberg, University of Pittsburgh",
+        "domain": "chemical engineering",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/chemwest/west0132.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/chemwest/west0132.mtx.gz",
+        "sha256": "0813939e9a1673a1b52b878d6597932d6ea837ef7d05f30bdcd5bec7a6a0392b",
+        "archive_sha256": "4af0c06f879623d9d41db89a1d9ffef47a7311169976349144c46036216e599d",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "name": "jpwh_991",
+      "path": "data/harwell_boeing/jpwh_991.mtx",
+      "rows": 991,
+      "cols": 991,
+      "nnz": 6027,
+      "sha256": "b58fec585ed0e7a324c1de56d28bd9900ffd2844c8f08db92516afe5c0f4d008",
+      "source": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "jpwh_991",
+        "source_author": "J. P. Whelan, Philips Research Laboratories",
+        "domain": "circuit physics",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/cirphys/jpwh_991.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/cirphys/jpwh_991.mtx.gz",
+        "sha256": "b58fec585ed0e7a324c1de56d28bd9900ffd2844c8f08db92516afe5c0f4d008",
+        "archive_sha256": "5a8bee63ba8d4762297dba24ffc613e4edb64b682efc98404fcf9808ed5189b0",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "name": "sherman1",
+      "path": "data/harwell_boeing/sherman1.mtx",
+      "rows": 1000,
+      "cols": 1000,
+      "nnz": 3750,
+      "sha256": "c1e51586b785ec8bc575193c855d4a9afd8c6e315835ea47937d2b78ec0e0476",
+      "source": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "sherman1",
+        "source_author": "Andy Sherman, Nolan and Associates",
+        "domain": "oil reservoir modelling",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/sherman/sherman1.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/sherman/sherman1.mtx.gz",
+        "sha256": "c1e51586b785ec8bc575193c855d4a9afd8c6e315835ea47937d2b78ec0e0476",
+        "archive_sha256": "36f6d76bbfec3c4465070e92171b05ed74fda5beb4a5a0910b2237ff6de6c2fd",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "name": "pores_1",
+      "path": "data/harwell_boeing/pores_1.mtx",
+      "rows": 30,
+      "cols": 30,
+      "nnz": 180,
+      "sha256": "06cdf9fcc9c9dd25d8232e64400feadb6c087437299a991decb4fd17b6077a85",
+      "source": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "pores_1",
+        "source_author": "John Appleyard, Harwell Laboratory",
+        "domain": "reservoir modelling",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/pores/pores_1.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/pores/pores_1.mtx.gz",
+        "sha256": "06cdf9fcc9c9dd25d8232e64400feadb6c087437299a991decb4fd17b6077a85",
+        "archive_sha256": "56c6c013f49b7e91c3e30612121a3c4139b3eb2988f92d3b5af2830d616ba8a7",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    },
+    {
+      "name": "well1033",
+      "path": "data/harwell_boeing/well1033.mtx",
+      "rows": 1033,
+      "cols": 320,
+      "nnz": 4732,
+      "sha256": "9953cb6091a268afb6725bd92c26cdea68c8897b2d9a31a0656b0c0022e25f0c",
+      "source": {
+        "collection": "NIST Matrix Market / Harwell-Boeing",
+        "name": "well1033",
+        "source_author": "Michael Saunders, Stanford University",
+        "domain": "surveying least squares",
+        "retrieved": "2026-10-06",
+        "pilot_already_observed": false,
+        "page": "https://math.nist.gov/MatrixMarket/data/Harwell-Boeing/lsq/well1033.html",
+        "download": "https://math.nist.gov/pub/MatrixMarket2/Harwell-Boeing/lsq/well1033.mtx.gz",
+        "sha256": "9953cb6091a268afb6725bd92c26cdea68c8897b2d9a31a0656b0c0022e25f0c",
+        "archive_sha256": "5489ac8433eb94f98e9f452c0501eb62df545070749e45636cdaf701df5f3444",
+        "selection": "purposeful convenience sample, 2 observed pilots + 6 new metadata-selected problems"
+      }
+    }
+  ],
+  "failures": []
+}
