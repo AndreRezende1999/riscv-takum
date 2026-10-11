@@ -1,6 +1,6 @@
 # Comparação entre as implementações C e Python
 
-Esta branch acrescenta uma implementação independente em `python/`, mantendo os arquivos existentes do grupo. A versão C, sua especificação, artigo e slides continuam na raiz. Nenhum arquivo preexistente foi alterado por esta contribuição.
+A implementação independente em `python/` foi integrada pelo PR #1 e faz parte do projeto. Ela é o modelo de referência: gera os vetores dourados dos testes do simulador (PR #2, `sim/`) e a saída esperada das instruções Zvtakum e dos kernels SpMV. A implementação C11 anterior foi removida do repositório; o histórico permanece no git.
 
 A implementação Python modela Takum **linear** T8/T16/T32, acumulação T64 e um subconjunto funcional vetorial. A divisão dos módulos e os nomes das operações aproveitam a organização do [protótipo do grupo](docs/spec/zvtakum.adoc); o contrato numérico e as referências reutilizadas estão em [python/docs/05_solucao_python.md](python/docs/05_solucao_python.md). Ela permite comparar comportamento e decisões de arquitetura, sem usar a ALU C como backend.
 
@@ -33,4 +33,4 @@ No PowerShell, depois de entrar em `python/`:
 
 As tabelas em `python/docs/01*` e os primeiros diagnósticos em `python/docs/evidencias/` documentam o ZIP recebido e a análise local; não constituem uma auditoria de todas as alterações posteriores da branch principal. Caminhos absolutos nos manifestos identificam o ambiente da execução original. A rotina usual de testes e os novos benchmarks usam os arquivos locais de `python/`.
 
-Para manter a comparação, consultar esta branch ou o pull request em rascunho antes de decidir qualquer integração. Os resultados de C já presentes e os resultados Python ficam identificados separadamente. A avaliação não demonstra superioridade universal de Takum: no cenário escalado, T32 apresentou menor erro que binary32 nos oito problemas, enquanto E4M3 apresentou menor erro que T8 nos mesmos oito.
+O papel atual de cada parte está em `docs/arquitetura.md`: `sim/` é o executor de ISA (C++17, com aritmética Takum própria), e `python/` é o gabarito bit a bit (racionais exatos e binary128 por software). A avaliação não demonstra superioridade universal do Takum: no cenário escalado deste conjunto, T32 apresentou menor erro que binary32 nos oito problemas, enquanto E4M3 apresentou menor erro que T8 nos mesmos oito.
