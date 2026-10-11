@@ -1,208 +1,125 @@
-= Zvtakum: extensão de aritmética Takum para RVV (proposta)
-:toc: left
-:toclevels: 3
+= Zvtakum: especificação experimental (v0, branch refactor/zvtakum-cpp)
+:toc:
+:sectnums:
 
-NOTE: Documento interno do projeto (Projeto Integrador AOC/UFMG). Não é uma
-especificação ratificada pela RISC-V International. Nomes de extensão e
-mnemônicos são provisórios.
+Esta especificação descreve o que o simulador `sim/` implementa. Não é uma extensão
+ratificada da RISC-V International. Os encodings e a semântica são propostas do projeto,
+validadas contra o modelo de referência descrito em `docs/arquitetura.md`.
 
-== Introdução
+== Formato numérico
 
-Este documento especifica o formato numérico *takum* (arXiv:2404.18603 e
-arXiv:2503.14067) para uso vetorial no RISC-V, e a extensão de instruções
-*Zvtakum* proposta para o projeto. A referência de software é a biblioteca
-`libtakum` v2.0.0 (ISC), fixada em `third_party/libtakum`.
+Takum linear de largura n ∈ {8, 16, 32}, definido em Hunhold (arXiv:2404.18603v2,
+Def. 8). Um código de n bits é lido como:
 
-Duas variantes do formato são suportadas:
+* S (sinal), D (direção), R (3 bits de regime), C (r bits de característica), F (p bits de fração), com r = R se D = 1 e r = 7 − R se D = 0, e p = n − 5 − r.
+* Para n < 12, a janela de decodificação tem 12 bits: o código recebe zeros fantasmas à direita.
+* Valor: (1 − 3S + F/2^p) · 2^e, com e = (−1)^S · (c + S), onde c = 2^r − 1 + C (D = 1) ou c = −2^(r+1) + 1 + C (D = 0).
+* NaR é o código `1000…0`. O zero é o código `0…0`. Não há infinito.
+* Negação é o complemento de dois do código.
 
-* *linear* (Definição 8 do artigo): significando linear em base 2;
-* *logarítmica* (Definição 2 do artigo, variante padrão): significando
-  logarítmico em base stem:[sqrt(e)].
+Acumulador de largura n = 2·SEW: T16 para T8, T32 para T16, T64 para T32. T64 não é exposto
+como elemento de registrador; ele só existe no acumulador de `vtdot.vv`.
 
-O padrão deste projeto é a variante logarítmica; a variante linear é a usada
-no benchmark de viabilidade do artigo AVX10.2 (MuFoLAB usava `LinearTakum8/16/32`).
+== Arredondamento (normativo)
 
-== Layout do formato
+Para um valor exato v ≠ 0 com magnitude |v| e código positivo de n bits:
 
-Um takum de stem:[n] bits é uma cadeia MSB->LSB stem:[(S, D, R, C, F)]:
+1. Calcule o código de n+1 bits da magnitude (prefixo da cadeia infinita do código) e
+   o bit *sticky* (indica bits não nulos além do prefixo).
+2. Seja L o prefixo de n bits e m o bit de meio-ponto (último bit do prefixo de n+1 bits).
+3. Se m = 0, o resultado é L. Se m = 1, arredonde para L+1 quando o sticky estiver ativo
+   ou quando L for ímpar (empate para par no código).
+4. Limite o resultado ao intervalo [1, maxpos]: |v| > maxpos produz maxpos, e
+   0 < |v| < minpos produz minpos. Resultados exatamente zero produzem zero.
+5. Para v < 0, o código é o complemento de dois do código de |v|.
 
-[source]
-----
-MSB                                                        LSB
-+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-| S | D |     R     |            C            |      F      |
-+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-  1   1       3                     r                 p
-----
+O arredondamento é feito no código e não no valor. Por isso ele pode diferir do vizinho
+mais próximo em valor, como registrado em `docs/devlog.md` (D7). Este é o comportamento
+do modelo Python (`python/takum_rvv/codec.py`) e coincide com a libtakum para T8.
 
-Campos (com stem:[n >= 12]; para stem:[n < 12], ver "Ghost bits"):
+== Codificação
 
-* stem:[S in {0,1}]: bit de sinal.
-* stem:[D in {0,1}]: bit de direção.
-* stem:[R = (R_2, R_1, R_0)]: bits de regime.
-* stem:[r]: regime, stem:[r = D ? "UI"(R) : 7 - "UI"(R)] em stem:[0..7].
-* stem:[C]: stem:[r] bits de característica.
-* stem:[c]: característica,
-  stem:[c = D ? (2^r - 1 + sum C_i 2^i) : (-2^(r+1) + 1 + sum C_i 2^i)].
-* stem:[p = n - r - 5]: quantidade de bits de fração/mantissa.
-* stem:[F]: stem:[p] bits; stem:[f = 2^{-p} sum F_i 2^i] em stem:[0,1).
+Todas as instruções usam o espaço custom-0 (`opcode = 0x0B`):
 
-.Os três tamanhos de elemento suportados e seus extremos representáveis.
-[cols="1,1,1,1,1,1",options="header"]
-|====
-| Variante | Tamanho | p (faixa) | Menor positivo | Maior positivo | Faixa dinâmica
-| linear | T8  | -4..3  | 1.131959885e-72 | 8.834235324e+71 | ~7.8e143
-| linear | T16 | 4..11  | 1.835185818e-77 | 5.608679322e+76 | ~3.1e153
-| linear | T32 | 20..27 | 1.727235358e-77 | 5.789601701e+76 | ~3.4e153
-| log    | T8  | -4..3  | 1.264181448e-52 | 7.910256886e+51 | ~6.3e103
-| log    | T16 | 4..11  | 4.375475535e-56 | 2.285465870e+55 | ~5.2e110
-| log    | T32 | 20..27 | 4.240858328e-56 | 2.358013220e+55 | ~5.6e110
-|====
+[cols="1,1,1,4"]
+|===
+| Campo | Bits | Valor | Observação
 
-NOTA: A faixa dinâmica de T16/T32 já satura no valor máximo do formato
-(stem:[2^+-255] linear, stem:[sqrt(e)^+-255] log); T8 tem faixa reduzida
-(stem:[2^+-239] linear, stem:[e^+-119.5] log) por causa dos bits fantasma.
-Os valores da tabela são gerados por `build/tools/zt-format`.
+| funct6 | 31–26 | 0–4 | operação (ver tabela abaixo)
+| vm | 25 | 1 | 1 = sem máscara; 0 = máscara v0 (convenção da RVV)
+| vs2 | 24–20 | reg | operando 2
+| vs1 | 19–15 | reg | operando 1; em `vncvt.t.t` deve ser zero
+| funct3 | 14–12 | 0 | qualquer outro valor é ilegal
+| vd | 11–7 | reg | destino
+|===
 
-=== Valor representado
+[cols="1,1,4"]
+|===
+| funct6 | Mnemônico | Operação
 
-* zero: todos os bits em 0 (stem:[S=0] e stem:[D=R=C=F=0]);
-* NaR (Not a Real): stem:[S=1] e stem:[D=R=C=F=0] (padrão de bits
-  `100..0` = 0x80/0x8000/0x80000000, igual ao menor inteiro em complemento
-  de dois);
-* variante linear:
-  stem:[e = (-1)^S (c + S)] em stem:[-255..254],
-  stem:[v = [(1 - 3S) + f] 2^e];
-* variante logarítmica: stem:[l = (-1)^S (c + f)] em stem:[(-255, 255)],
-  stem:[v = (-1)^S sqrt(e)^l].
+| 0 | `vtadd.vv vd, vs2, vs1` | vd[i] = vs2[i] + vs1[i]
+| 1 | `vtsub.vv vd, vs2, vs1` | vd[i] = vs2[i] − vs1[i]
+| 2 | `vtmul.vv vd, vs2, vs1` | vd[i] = vs2[i] × vs1[i]
+| 3 | `vtdot.vv vd, vs2, vs1` | vd[0] = vd[0] + Σ vs2[i] × vs1[i]
+| 4 | `vncvt.t.t vd, vs2` | vd[i] = estreitamento de vs2[i] (de 2·SEW para SEW)
+|===
 
-NaR compara igual a si mesmo e é menor que qualquer outro takum (ordem total
-em complemento de dois). Não há infinito; a saturação representa o overflow.
+Os números de funct6 coincidem com `OPERATIONS` em `python/takum_rvv/vector.py`.
 
-=== Ghost bits (n < 12)
+== Semântica
 
-Cadeias menores que 12 bits são decodificadas assumindo zero nos bits
-faltantes do lado menos significativo (extensão à esquerda na cadeia):
-stem:[E = "bits" << (12 - n)]. O decodificador de 12 bits processa todos os
-tamanhos; os bits stem:[C] que não cabem em stem:[n] bits são zeros
-fantasma. Consequência: para T8, stem:[p] pode ser negativo (sem bits de
-mantissa).
+=== Configuração
 
-== Arredondamento e saturação
+SEW vem de `vtype` (8, 16 ou 32). As instruções Zvtakum são ilegais com SEW = 64.
+LMUL ∈ {1, 2, 4, 8}. LMUL fracionário ativa `vill`. ELEN = 64.
 
-A aritmética é *saturante*: valores fora da faixa são presos ao menor/maior
-representável (com o sinal), sem overflow/underflow para infinito nem zero
-silencioso. NaR propaga por todas as operações.
+=== Instruções elementares (`vtadd`, `vtsub`, `vtmul`)
 
-Dois modos de arredondamento são definidos:
+Para cada elemento i de `vstart` até `vl − 1`:
 
-* *RNE* (padrão do projeto): arredonda para o representável mais próximo;
-  empates para o valor de mantissa par. É o comportamento do `libtakum`
-  v2.0.0 e o modo normativo do ISA proposto.
-* *Algoritmo 1* (fidelidade ao artigo): trunca a cadeia em stem:[n+1] bits,
-  arredonda pelo bit de guarda (empates para cima na ordem de bit string) e
-  corrige under/overflow. Implementado em `zt_round_algo1`.
+* com máscara ativa: vd[i] recebe o resultado arredondado;
+* com máscara inativa: vd[i] segue `vma` (agnóstico = todos os bits em 1; não agnóstico = mantém o valor).
 
-Medição do projeto: em 200.000 amostras aleatórias por variante/tamanho não
-se observou divergência entre RNE e o Algoritmo 1 (empates exatos são raros
-e não foram exercitados nas amostras).
+Os elementos de `vl` até VLMAX−1 seguem `vta`: com `vta = 1` são preenchidos com 1s, e com `vta = 0`
+mantêm o valor anterior. A RVV 1.0 permite as duas escolhas para elementos agnósticos; o simulador adota 1s,
+e o QEMU só concorda com ele quando configurado com `rvv_ta_all_1s` e `rvv_ma_all_1s`. NaR se propaga; não
+há exceções nem flags.
 
-== Decodificador de 12 bits comum
+=== `vtdot.vv`
 
-Todo takum, independentemente de stem:[n], é decodificado a partir dos no
-máximo 12 bits mais significativos: os campos stem:[S, D, R] e os bits de
-stem:[C] cabem sempre em 11 bits (stem:[1+1+3+7=12]) e os bits restantes são
-sempre de mantissa/fração. Essa é a base do argumento de hardware do artigo
-(decodificador compartilhado por todas as precisões).
+* O acumulador é o elemento 0 de `vd`, com EEW = 2·SEW. `vd` ocupa um único registrador (EMUL = 1).
+* Para cada i ativo, em ordem crescente: p = arredonda_2n(vs2[i] × vs1[i]); acc = arredonda_2n(acc + p).
+* Só o elemento 0 é gravado. Os demais elementos do registrador seguem `vta`.
+* Com `vl = 0`, o acumulador não muda (com `vta = 0`).
+* `vstart ≠ 0` é ilegal.
 
-== Instruções Zvtakum
+=== `vncvt.t.t`
 
-`vtype.SEW` seleciona o formato de elemento: 8 -> T8, 16 -> T16, 32 -> T32.
-São reutilizados `vl`, `vstart`, `vta`/`vma` e o mascaramento por `v0`.
+* A origem é um grupo de EEW = 2·SEW e EMUL = 2·LMUL, com base alinhada a 2·LMUL.
+* O destino tem SEW e LMUL. Elementos ativos são arredondados para o formato de SEW.
+* O campo vs1 deve ser zero, senão a instrução é ilegal.
 
-.Instruções propostas (Fase 2 do projeto).
-[cols="1,2,3",options="header"]
-|====
-| Mnemônico | Operação | Observações
-| `vtadd.vv` | stem:[vd_i = vd_i?] não: stem:[vd_i = vs2_i + vs1_i] | elemento a elemento, saturante, NaR propaga
-| `vtsub.vv` | stem:[vd_i = vs2_i - vs1_i] | idem
-| `vtmul.vv` | stem:[vd_i = vs2_i times vs1_i] | idem
-| `vtdot.vv` | acumula em stem:[vd_0]: stem:[vd_0 <- vd_0 + sum_i vs2_i times vs1_i] | redução com acúmulo alargado: T8->T16, T16->T32, T32->T64; destino com `EEW = 2*SEW` (grupo de 2 registradores); `vs1` reservado (zero); `vd_0` deve ser inicializado pelo software (ex.: `vmv`/zero)
-| `vncvt.t.t` | estreitamento stem:[T{2n} -> T{n}] (T32->T16->T8) | como `vfncvt`: origem com `EEW = 2*SEW`; RNE + saturação
-|====
+== Restrições da implementação
 
-Semântica dos produtos no `vtdot.vv`: cada produto é calculado em precisão
-exata a partir dos valores decodificados e arredondado (RNE, saturante) para
-T_(2*SEW); a acumulação é feita em T_(2*SEW) com adição saturante. T64 não é
-um tipo de elemento geral: aparece apenas como acumulador/resultado de
-`vtdot.vv` com `SEW=32`.
+As restrições abaixo são decisões do simulador, não da arquitetura:
 
-=== Encodings
+* Instruções vetoriais de ponto flutuante (`vfadd.vv`, `vfmul.vv`, `vfredusum.vs`) só existem com SEW = 32.
+* `vfredusum.vs` exige `vstart = 0`. A soma é sequencial em ordem crescente de índice.
+* Cargas e armazenamentos unitários exigem EEW = SEW. Cargas indexadas são só `vluxei32.v`, com índice de 32 bits.
+* Loads e stores aceitam apenas `mop = 0` (unitário) ou `mop = 1` (indexado), sem segmentos.
+* `vmv.v.v` e `vmv.v.i` existem apenas com `vm = 1`.
+* Zvfh (FP16 vetorial) é reconhecido pelo assembler, mas não é executado pelo simulador.
 
-Provisórios, no único `funct6` livre do OP-V (`0b111001`, opcode `0x57`),
-com `funct3` como sub-opcode e bit 25 = 0. Arquivo
-`docs/opcodes/zvtakum.opcodes` no formato do `riscv-opcodes`:
+== Estado arquitetural
 
-| Mnemônico | funct6 | funct3 |
-|---|---|---|
-| `vncvt.t.t` | `0b111001` | 0 |
-| `vtadd.vv` | `0b111001` | 1 |
-| `vtsub.vv` | `0b111001` | 2 |
-| `vtmul.vv` | `0b111001` | 3 |
-| `vtdot.vv` | `0b111001` | 4 |
-| `vtdiv.vv` (reservado) | `0b111001` | 5 |
-| `vtsqrt.v` (reservado) | `0b111001` | 6 |
+* CSRs de vetor: `vstart` (0x008), `vxsat` (0x009), `vxrm` (0x00A), `vcsr` (0x00F, leitura e escrita); `vl` (0xC20), `vtype` (0xC21) e `vlenb` (0xC22) são somente leitura.
+* Zvtakum não adiciona CSR. Não há modo de arredondamento nem flags acumuladas.
+* `vsetvli`, `vsetivli` e `vsetvl` seguem a RVV 1.0 (tabela de rd e rs1): com rs1 = x0 e rd ≠ x0, AVL = VLMAX; com rs1 = x0 e rd = x0, AVL = vl atual.
+* Modo máquina sem sistema operacional. `mstatus.VS` é tratado como ativo.
 
-NOTA: o uso de `funct3` como sub-opcode difere da convenção RVV (onde
-`funct3` indica os tipos de operandos). É uma escolha provisória do projeto,
-registrada em `docs/rvv-restructuring.md`.
+== Verificação
 
-=== Exceções e CSRs
-
-Não há novas exceções de ponto flutuante nem novos CSRs: a aritmética é
-sempre saturante, NaR é um valor (não uma exceção) e o arredondamento é RNE
-fixo. `vstart` preserva a semântica de retomada da RVV; operações mascaradas
-e o tratamento de tail seguem `vta`/`vma`.
-
-== Simulador funcional
-
-Implementado em C11 (`src/rvv_state.c`, `src/rvv_insns.c`), sem dependências
-além do `libtakum`:
-
-* estado: 32 registradores vetoriais, `vtype` (SEW 8/16/32, LMUL 1/2/4/8,
-  `vta`/`vma`), `vl`, `vstart`, registradores escalares (endereços e `rd`),
-  memória plana de 1 MiB; `VLEN` configurável (padrão 256 bits);
-* políticas de máscara/tail: `vta`/`vma` = 0 (undisturbed) ou 1 (agnóstico,
-  preenchido com 1s); máscara em `v0`;
-* instruções RVV suportadas (subconjunto para os kernels):
-  `vsetvli`/`vsetivli`/`vsetvl`, `vle8/16/32.v`, `vse8/16/32.v`,
-  `vfadd.vv`/`vfadd.vf`, `vfmul.vv`/`vfmul.vf` (f32),
-  `vfredusum.vs` (f32), `vrgather.vv`, `vmv.v.v`, `vmv.v.i`,
-  `vfmv.v.f`;
-* instruções Zvtakum: `vtadd.vv`, `vtsub.vv`, `vtmul.vv`, `vtdot.vv`,
-  `vncvt.t.t`;
-* contadores: total de instruções, RVV, Zvtakum, escritas de CSR
-  (`vtype`/`vl`) e elementos ativos processados; `trace` opcional.
-
-Ferramentas: `build/tools/zt-disa` (encode/decode de instruções) e
-`build/tools/zt-run` (monta e executa arquivos `.zt`, com opções
-`--variant`, `--vlen`, `--x N=V`, `--init8`). Exemplos em `examples/` e
-`make demo`.
-
-Limitações desta versão: LMUL fracionário não suportado; operações f16/f64
-da RVV de base não implementadas (o foco é f32 para comparação IEEE e
-T8/T16/T32 para takum); gathers com índice de 16 bits
-(`vrgatherei16.vv`) não implementados; apenas acesso unit-stride.
-
-== Estado
-
-* F1 (concluído): codec (decode/encode, ghost bits, campos), ALU
-  (add/sub/mul/div/sqrt/abs/neg), dois modos de arredondamento, testes
-  exaustivos T8 e propriedades formais.
-* F2 (concluído): instruções `vtadd.vv`, `vtsub.vv`, `vtmul.vv`,
-  `vtdot.vv`, `vncvt.t.t` especificadas, encodings provisórios e
-  reestruturação RVV em `docs/rvv-restructuring.md`.
-* F3 (concluído): simulador funcional RVV+Zvtakum, assembler/disassembler,
-  ferramentas `zt-disa`/`zt-run`, exemplos e testes de máscara/tail,
-  instruções e programas completos.
-* F4 (próximo): benchmarks (viabilidade com matrizes, SpMV, fechamento).
+* Núcleo Takum: tabelas T8 completas, narrow T16→T8 completo, operações amostradas em T16/T32/T64 e vtdot amostrado (`sim/tests/test_main.cpp`, vetores em `sim/tests/golden/`).
+* Instruções padrão: teste diferencial com QEMU user-mode, byte a byte, para VLEN 128/256/512 (`sim/tests/difftest.py`).
+* Zvtakum: teste contra o modelo Python, byte a byte, para VLEN 128/256/512 (`sim/tests/gen_zvt.py`).
+* Kernels SpMV: saída igual bit a bit ao modelo Python (`scalar_spmv`), para FP32 e takum (`sim/kernels/spmv.py`).

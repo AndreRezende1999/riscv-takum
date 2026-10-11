@@ -1,5 +1,9 @@
 # Decisoes de projeto (log)
 
+> Documento histórico (até 2026-09-15, versão C11). As decisões atuais da branch
+> `refactor/zvtakum-cpp` estão em `docs/decisoes.md`. Onde este texto diverge (por exemplo,
+> a codificação OP-V com `funct6=0b111001` como "único livre", D9 e D11), vale o documento novo.
+
 Este documento registra as decisoes do projeto, em ordem. Atualizar a cada
 decisao relevante (mantendo data e motivo).
 

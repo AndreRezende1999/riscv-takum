@@ -105,5 +105,26 @@ clean:
 distclean: clean
 	cd third_party/libtakum && $(MAKE) clean
 
+# Simulador novo (C++17) e experimentos da branch refactor/zvtakum-cpp.
+sim:
+	$(MAKE) -C sim all
+
+sim-test:
+	$(MAKE) -C sim test
+
+sim-check: sim
+	$(PYTHON) sim/tests/gen_asm.py
+	$(PYTHON) sim/tests/gen_zvt.py
+	$(PYTHON) sim/tests/difftest.py
+
+spmv: sim
+	$(PYTHON) sim/kernels/spmv.py
+	$(PYTHON) sim/kernels/numeric_baselines.py
+	$(PYTHON) sim/kernels/modelo_contagem.py
+
+paper-data:
+	$(PYTHON) paper/gera_tabelas.py
+
 .PHONY: all test third_party demo matrices bench-convert bench-analyze \
-	bench-closure bench-spmv bench paper slides clean distclean
+	bench-closure bench-spmv bench paper slides clean distclean \
+	sim sim-test sim-check spmv paper-data
