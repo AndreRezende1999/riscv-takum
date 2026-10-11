@@ -1,0 +1,5 @@
+formato,r,c,k,sinteticos_ok,sinteticos_total,execucoes,exatas,residuo_max
+fp32,13,12,21,3,3,24,24,0
+takum8,14,12,21,3,3,24,24,0
+takum16,14,13,21,3,3,24,24,0
+takum32,14,11,21,3,3,24,24,0
