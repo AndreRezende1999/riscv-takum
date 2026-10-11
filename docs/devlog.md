@@ -215,3 +215,15 @@ make demo
 - Pendencia manual da equipe: preencher autores/afiliacao nos dois fontes e
   (opcional) rodar as 1401 matrizes do artigo.
 
+
+## 2026-10-10 - Refactor: simulador C++17 no lugar do C11
+
+- Branch `refactor/zvtakum-cpp`, PR #2: simulador de ISA em C++17 (`sim/`), com
+  aritmética Takum própria em inteiros, Zvtakum em custom-0 e verificação
+  diferencial contra o QEMU e contra o modelo Python.
+- Kernels SpMV em RISC-V para FP32 e Takum, todos bit a bit iguais ao modelo
+  (96 execuções), e modelo de contagem `N = rR + cS + K` com resíduo zero.
+- Artigo reescrito em português, com tabelas e números gerados a partir dos CSVs.
+- Implementação C11 removida do repositório (`src/`, `include/`, `tests/`,
+  `tools/`, `bench/`); o histórico permanece no git. Os resultados do artigo
+  baseados nela (100 matrizes, `long double`) deixam de ser mantidos.
