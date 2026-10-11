@@ -5,8 +5,7 @@ em uma extensão vetorial experimental para RISC-V (Zvtakum), sobre a RVV 1.0.
 
 A branch `refactor/zvtakum-cpp` reorganiza o trabalho em torno de um simulador de ISA em
 C++17 (`sim/`), com gabarito em Python e testes diferenciais contra o QEMU. A versão C11
-anterior (`src/`, `include/`, `tests/`, `tools/`, `bench/`) foi mantida como referência
-histórica e não é o caminho principal.
+anterior foi removida; o histórico permanece no git (`main` anterior a este merge).
 
 ## Conteúdo
 
@@ -18,7 +17,7 @@ histórica e não é o caminho principal.
 * `python/`: modelo de referência em Python (racionais exatos, binary128 por software) e a implementação de comparação.
 * `paper/`: artigo em português (IEEE).
 * `slides/`: apresentação e roteiro da demonstração.
-* `src/`, `include/`, `tests/`, `tools/`, `bench/`: implementação C11 anterior (legado).
+
 
 ## Como reproduzir
 
