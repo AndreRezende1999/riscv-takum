@@ -1,9 +1,0 @@
-# axpy vetorial em IEEE f32: y = alpha * x + y
-# Registradores: x10 = n, x20 = &x, x21 = &y, x23 = alpha (bits f32)
-# Uso: build/tools/zt-run --x 10=8 --x 20=0 --x 21=64 --x 23=1056964608 examples/axpy.zt
-vsetvli x1, x10, e32, m1, ta, ma
-vle32.v v1, (x20)
-vle32.v v2, (x21)
-vfmul.vf v2, v2, x23
-vfadd.vv v1, v1, v2
-vse32.v v1, (x21)

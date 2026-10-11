@@ -1,64 +1,49 @@
 # riscv-takum (Zvtakum)
 
-Projeto Integrador (AOC/UFMG): implementacao e avaliacao do formato aritmetico
-**Takum** na extensao vetorial **RISC-V (RVV)**.
+Projeto Integrador (AOC/UFMG): implementação e avaliação do formato aritmético **Takum**
+em uma extensão vetorial experimental para RISC-V (Zvtakum), sobre a RVV 1.0.
 
-Replica a metodologia de:
+A branch `refactor/zvtakum-cpp` reorganiza o trabalho em torno de um simulador de ISA em
+C++17 (`sim/`), com gabarito em Python e testes diferenciais contra o QEMU. A versão C11
+anterior (`src/`, `include/`, `tests/`, `tools/`, `bench/`) foi mantida como referência
+histórica e não é o caminho principal.
 
-- L. Hunhold, *Streamlining SIMD ISA Extensions with Takum Arithmetic: A Case
-  Study on Intel AVX10.2* (MOCAST 2025), arXiv:2503.14067
-- L. Hunhold, *Beating Posits at Their Own Game: Takum Arithmetic*
-  (CoNGA 2024), arXiv:2404.18603
+## Conteúdo
 
-## Conteudo
+* `sim/`: simulador RV64IM + Zicsr, subconjunto RVV 1.0 e Zvtakum (`zt-sim`), núcleo Takum em inteiros, testes e experimentos SpMV.
+* `docs/arquitetura.md`: arquitetura, componentes e níveis de verificação.
+* `docs/decisoes.md`: registro das decisões (D1–D10), com status e pendências.
+* `docs/spec/zvtakum.adoc`: especificação experimental (formato, encodings, semântica, restrições).
+* `docs/opcodes/zvtakum.opcodes`: encodings no formato riscv-opcodes (custom-0).
+* `python/`: modelo de referência em Python (racionais exatos, binary128 por software) e a implementação de comparação.
+* `paper/`: artigo em português (IEEE).
+* `slides/`: apresentação e roteiro da demonstração.
+* `src/`, `include/`, `tests/`, `tools/`, `bench/`: implementação C11 anterior (legado).
 
-- `include/`, `src/` - codec/ALU Takum (T8/T16/T32), variantes linear (Def. 8)
-  e logaritmica (Def. 2); simulador funcional RVV + Zvtakum
-  (`vtadd`, `vtsub`, `vtmul`, `vtdot`, `vncvt`)
-- `tools/` - `zt-disa` (encode/decode de instrucoes), `zt-run` (executa `.zt`)
-- `examples/` - programas de exemplo (`axpy.zt`, `takum_dot.zt`)
-- `tests/` - testes unitarios, testes de propriedades e vetores golden
-- `bench/` - benchmark de viabilidade (matrizes esparsas) e SpMV
-- `docs/` - decisoes de projeto, especificacao, tabelas de reestruturacao
-  do ISA e devlog
-- `paper/` - artigo em formato IEEE (LaTeX)
+## Como reproduzir
 
-## Build
-
-Dependencias: C11 (`cc`), GNU make e o submodule `third_party/libtakum` (ISC).
+Requisitos: `c++` (C++17), `llvm-mc`, `ld` com suporte a `elf64lriscv`, `qemu-riscv64` e Python 3.10+.
 
 ```sh
-git submodule update --init --recursive
-make third_party   # compila libtakum (pinada em v2.0.0)
-make test          # testes
-make demo          # exemplos com zt-disa/zt-run
-make bench         # benchmarks (matrizes -> CSV -> CDFs)
+make sim-test                 # núcleo Takum contra vetores dourados
+make sim-check                # RVV padrão contra QEMU; Zvtakum contra o modelo
+make spmv                     # SpMV em 8 matrizes, 4 formatos, 3 VLENs, + modelo de contagem
+make paper-data               # regenera tabelas e números do artigo a partir de sim/results/
+make paper                    # compila paper/main.pdf (latexmk)
 ```
 
-## Entregaveis
-
-- **Codigo/ferramentas**: `src/`, `include/`, `tools/`, `tests/` (simulador
-  RVV+Zvtakum, codec/ALU, zt-disa/zt-run, testes exaustivos).
-- **Especificacao**: `docs/spec/zvtakum.adoc` (formato, instrucoes,
-  encodings, excecoes), `docs/rvv-restructuring.md` (tabelas
-  original->proposta), `docs/opcodes/zvtakum.opcodes`.
-- **Benchmarks**: `bench/` + `bench/results/` (CSVs, summaries, figuras CDF,
-  fechamento, SpMV).
-- **Artigo IEEE** (ate 6 paginas, em ingles): `paper/main.tex` - compila com
-  `make paper` (LaTeX) ou no Overleaf (template IEEE conference).
-- **Slides + roteiro da demo**: `slides/slides.tex` e `slides/roteiro.md`
-  (`make slides`).
-- **Documentacao do processo**: `docs/devlog.md` (cronologico) e
-  `docs/design.md` (decisoes).
+Resultados: `sim/results/spmv_hb.csv` (96 execuções, todas bit a bit iguais ao modelo) e
+`sim/results/spmv_numerico_hb.csv` (FP8, FP16 e takum, somente numérico).
 
 ## Estado
 
-Projeto completo (F0-F5): codec/ALU, especificacao Zvtakum, encodings,
-reestruturacao RVV, simulador funcional, benchmark de viabilidade (100
-matrizes, 15 formatos), fechamento aritmetico (T8/T16) e SpMV; artigo e
-slides prontos para preencher autores e apresentar.
+* Núcleo Takum linear T8/T16/T32 (com T64 no acumulador): verificado contra o modelo Python.
+* Escalar RV64IM + Zicsr e RVV padrão (subconjunto): verificados contra o QEMU, byte a byte.
+* Zvtakum (5 instruções): verificado contra o modelo Python, byte a byte.
+* Kernels SpMV em RISC-V (FP32 e takum): bit a bit iguais ao modelo; erros medidos contra binary128.
+* Modelo de contagem `N = rR + cS + K`: parâmetros medidos em programas sintéticos e resíduo zero nas 96 execuções reais.
+* Pendências: variante logarítmica, FP16 vetorial (Zvfh) no simulador, estudo de 1401 matrizes (MuFoLAB) e revisão do artigo com os novos resultados. Ver `docs/decisoes.md`.
 
-## Licenca
+## Licença
 
-Codigo deste repositorio: ISC (ver `LICENSE`).
-`third_party/libtakum` e ISC, (c) Laslo Hunhold.
+Código deste repositório: ISC (ver `LICENSE`). `third_party/libtakum` é ISC, (c) Laslo Hunhold.

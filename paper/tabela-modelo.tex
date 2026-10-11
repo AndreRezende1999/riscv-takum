@@ -1,0 +1,16 @@
+\begin{table}[t]
+\caption{Parâmetros do modelo de contagem $N = rR + cS + K$, em que $R$ é o número de linhas e $S$ o número de faixas das linhas não vazias. A última coluna compara o modelo com as execuções reais.}
+\label{tab:modelo}
+\centering
+\footnotesize
+\begin{tabular}{@{}lcccrr@{}}
+\toprule
+Formato & $r$ & $c$ & $K$ & Sintéticos & Reais exatas \\
+\midrule
+FP32 & 13 & 12 & 21 & 3/3 & 24/24 \\
+Takum8 & 14 & 12 & 21 & 3/3 & 24/24 \\
+Takum16 & 14 & 13 & 21 & 3/3 & 24/24 \\
+Takum32 & 14 & 11 & 21 & 3/3 & 24/24 \\
+\bottomrule
+\end{tabular}
+\end{table}
