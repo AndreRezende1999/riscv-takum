@@ -12,7 +12,7 @@ novo `aoc-takum-riscv`, cuja `main` contém somente o núcleo Takum; a branch
 | André Luís Alves Rezende | 2018104050 | `<CONTRIBUIÇÕES>` |
 | Gabriel Ramos Fontes | 2022055939 | `<CONTRIBUIÇÕES>` |
 | Isadora Maria Carvalho Lopes | 2022421544 | `<CONTRIBUIÇÕES>` |
-| João Pedro Gonçalves de Noronha Dutra | `<MATRÍCULA>` | `<CONTRIBUIÇÕES>` |
+| João Pedro Santos de Brito | 2023038302 | `<CONTRIBUIÇÕES>` |
 
 ## Como reproduzir
 
