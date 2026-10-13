@@ -14,7 +14,6 @@ paper/build/
 paper/*.aux
 paper/*.log
 paper/*.out
-paper/*.pdf
 paper/*.bbl
 paper/*.blg
 paper/*.fls
@@ -25,9 +24,15 @@ slides/*.out
 slides/*.nav
 slides/*.snm
 slides/*.toc
-slides/*.pdf
 slides/*.fls
 slides/*.fdb_latexmk
 .venv/
 __pycache__/
 *.pyc
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.out
+*.bbl
+*.blg

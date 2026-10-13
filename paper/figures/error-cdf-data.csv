@@ -1,0 +1,8 @@
+format,count
+FP32,24
+Takum32,24
+E4M3,4
+E5M2,5
+FP16,5
+Takum16,24
+Takum8,24

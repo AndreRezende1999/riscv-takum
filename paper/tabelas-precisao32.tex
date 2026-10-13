@@ -1,22 +1,22 @@
 \begin{table*}[t]
-\caption{Erro relativo L2 do SpMV em 32 bits (VLEN = 256), por matriz. A coluna FP32 é o kernel vetorial (acumulador de 32 bits); as colunas de controle usam o modelo numérico com o acumulador indicado.}
+\caption{Relative L2 SpMV error at 32 bits (VLEN = 256), by matrix. FP32 is the vector kernel (32-bit accumulator); controls use the numerical model with the indicated accumulator.}
 \label{tab:precisao32}
 \centering
 \footnotesize
 \begin{tabular}{@{}lrcccc@{}}
 \toprule
-Matriz & nnz & FP32 & Takum32 & FP32 (acum.\ 64) & Takum32 (acum.\ 32) \\
+Matrix & nnz & FP32 & Takum32 & FP32 (64-bit acc.) & Takum32 (32-bit acc.) \\
 \midrule
-bcsstk01 & 400 & $7{,}20 \times 10^{-8}$ & $5{,}06 \times 10^{-8}$ & $3{,}57 \times 10^{-8}$ & $6{,}22 \times 10^{-8}$ \\
-bcsstk02 & 4356 & $1{,}81 \times 10^{-7}$ & $1{,}88 \times 10^{-8}$ & $4{,}63 \times 10^{-8}$ & $8{,}32 \times 10^{-8}$ \\
-jpwh\_991 & 6027 & $6{,}32 \times 10^{-8}$ & $4{,}19 \times 10^{-9}$ & $3{,}47 \times 10^{-8}$ & $9{,}40 \times 10^{-9}$ \\
-pores\_1 & 180 & $3{,}54 \times 10^{-8}$ & $7{,}87 \times 10^{-8}$ & $3{,}26 \times 10^{-8}$ & $5{,}44 \times 10^{-8}$ \\
-sherman1 & 3750 & $5{,}82 \times 10^{-8}$ & $4{,}02 \times 10^{-9}$ & $3{,}65 \times 10^{-8}$ & $4{,}93 \times 10^{-9}$ \\
-well1033 & 4732 & $5{,}99 \times 10^{-8}$ & $4{,}07 \times 10^{-9}$ & $3{,}72 \times 10^{-8}$ & $6{,}45 \times 10^{-9}$ \\
-west0067 & 294 & $4{,}82 \times 10^{-8}$ & $3{,}59 \times 10^{-9}$ & $3{,}27 \times 10^{-8}$ & $4{,}84 \times 10^{-9}$ \\
-west0132 & 413 & $5{,}01 \times 10^{-8}$ & $3{,}21 \times 10^{-8}$ & $4{,}00 \times 10^{-8}$ & $4{,}94 \times 10^{-8}$ \\
+bcsstk01 & 400 & $7.20 \times 10^{-8}$ & $5.06 \times 10^{-8}$ & $3.57 \times 10^{-8}$ & $6.22 \times 10^{-8}$ \\
+bcsstk02 & 4356 & $1.81 \times 10^{-7}$ & $1.88 \times 10^{-8}$ & $4.63 \times 10^{-8}$ & $8.32 \times 10^{-8}$ \\
+jpwh\_991 & 6027 & $6.32 \times 10^{-8}$ & $4.19 \times 10^{-9}$ & $3.47 \times 10^{-8}$ & $9.40 \times 10^{-9}$ \\
+pores\_1 & 180 & $3.54 \times 10^{-8}$ & $7.87 \times 10^{-8}$ & $3.26 \times 10^{-8}$ & $5.44 \times 10^{-8}$ \\
+sherman1 & 3750 & $5.82 \times 10^{-8}$ & $4.02 \times 10^{-9}$ & $3.65 \times 10^{-8}$ & $4.93 \times 10^{-9}$ \\
+well1033 & 4732 & $5.99 \times 10^{-8}$ & $4.07 \times 10^{-9}$ & $3.72 \times 10^{-8}$ & $6.45 \times 10^{-9}$ \\
+west0067 & 294 & $4.82 \times 10^{-8}$ & $3.59 \times 10^{-9}$ & $3.27 \times 10^{-8}$ & $4.84 \times 10^{-9}$ \\
+west0132 & 413 & $5.01 \times 10^{-8}$ & $3.21 \times 10^{-8}$ & $4.00 \times 10^{-8}$ & $4.94 \times 10^{-8}$ \\
 \midrule
-Mediana & & $5{,}91 \times 10^{-8}$ & $1{,}15 \times 10^{-8}$ & $3{,}61 \times 10^{-8}$ & $2{,}94 \times 10^{-8}$ \\
+Mediana & & $5.91 \times 10^{-8}$ & $1.15 \times 10^{-8}$ & $3.61 \times 10^{-8}$ & $2.94 \times 10^{-8}$ \\
 \bottomrule
 \end{tabular}
 \end{table*}

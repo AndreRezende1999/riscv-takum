@@ -1,36 +1,17 @@
-# Comparação entre as implementações C e Python
+# Modelo Python de referência
 
-A implementação independente em `python/` foi integrada pelo PR #1 e faz parte do projeto. Ela é o modelo de referência: gera os vetores dourados dos testes do simulador (PR #2, `sim/`) e a saída esperada das instruções Zvtakum e dos kernels SpMV. A implementação C11 anterior foi removida do repositório; o histórico permanece no git.
+O diretório `python/` contém o modelo independente usado como gabarito:
+racionais exatos para Takum, referência binary128 por software, geradores de
+matrizes e ferramentas de validação. Ele não compara mais uma implementação C
+removida; as comparações atuais são entre o modelo Python, o núcleo C++ e o
+simulador em `sim/`.
 
-A implementação Python modela Takum **linear** T8/T16/T32, acumulação T64 e um subconjunto funcional vetorial. A divisão dos módulos e os nomes das operações aproveitam a organização do [protótipo do grupo](docs/spec/zvtakum.adoc); o contrato numérico e as referências reutilizadas estão em [python/docs/05_solucao_python.md](python/docs/05_solucao_python.md). Ela permite comparar comportamento e decisões de arquitetura, sem usar a ALU C como backend.
-
-## Executar a versão Python
-
-Python 3.10+ e biblioteca padrão, sem pacotes externos:
+Os testes podem ser executados com:
 
 ```sh
 cd python
-python -m unittest discover -s tests -v
-python -m takum_rvv demo --vector ones
-python tools/run_validation.py --output results/minha_validacao
+python3 -m unittest discover -s tests -v
 ```
 
-No PowerShell, depois de entrar em `python/`:
-
-```powershell
-.\run.ps1 test
-.\run.ps1 demo --vector ones
-.\run.ps1 validate --output results/minha_validacao
-```
-
-## Evidências disponíveis
-
-- [Guia da implementação](python/README.md).
-- [Relatório numérico](python/docs/09_validacao_ampliada.md): 68 testes e 112 avaliações SpMV, com sete problemas esparsos e um controle denso, sete formatos e dois cenários de escala.
-- [Análise de instruções e CSRs](python/docs/10_analise_isa_csrs.md): contadores do modelo e limites da comparação.
-- [Leituras aplicadas](python/docs/06_leituras_para_implementacao.md) e [26 referências entre artigos, normas, software e dados](python/docs/referencias.bib).
-- [Resultados e parâmetros](python/results/validation_v2/comparison.json), com hashes, vetores e cópia do modelo executado.
-
-As tabelas em `python/docs/01*` e os primeiros diagnósticos em `python/docs/evidencias/` documentam o ZIP recebido e a análise local; não constituem uma auditoria de todas as alterações posteriores da branch principal. Caminhos absolutos nos manifestos identificam o ambiente da execução original. A rotina usual de testes e os novos benchmarks usam os arquivos locais de `python/`.
-
-O papel atual de cada parte está em `docs/arquitetura.md`: `sim/` é o executor de ISA (C++17, com aritmética Takum própria), e `python/` é o gabarito bit a bit (racionais exatos e binary128 por software). A avaliação não demonstra superioridade universal do Takum: no cenário escalado deste conjunto, T32 apresentou menor erro que binary32 nos oito problemas, enquanto E4M3 apresentou menor erro que T8 nos mesmos oito.
+Os resultados regeneráveis ficam documentados pelos alvos `make spmv` e
+`make paper-data`.

@@ -24,7 +24,8 @@ make sim-test      # 21 verificações; termina em menos de 1 s
 make sim-check     # 9 execuções: QEMU e modelo, byte a byte
 ```
 
-2. Um kernel no simulador, com contadores:
+2. Um kernel no simulador, com contadores (se `make spmv` for lento, use um ELF
+   já gerado ou limite a demonstração aos testes):
 
 ```sh
 make spmv          # opcional: gera sim/build/spmv/*.elf e os CSVs
@@ -38,6 +39,10 @@ O JSON traz `insn_total`, `insn_scalar`, `insn_vsetvl`, `insn_vector`,
 `bytes_stored` e `index_bytes_loaded`. Aponte a diferença entre o kernel de
 Takum32 e o de FP32 (`bcsstk01.fp32.v256.elf`): mesmas escritas de CSR, menos
 elementos ativos por causa do `vtdot`.
+
+FP8 e FP16 mostrados nos resultados são apenas baselines numéricos; não há
+contagem de instruções para eles, pois FP8 não faz parte da RVV 1.0 e Zvfh não
+é modelado nesta fase.
 
 3. (Opcional) `make paper-data` regenera tabelas e números; `make paper` compila
    o PDF.

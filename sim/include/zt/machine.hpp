@@ -1,3 +1,6 @@
+// Functional RV64IM/RVV/Zvtakum machine interface (Fase 2).
+// The architecture and unsupported instructions are documented in
+// docs/arquitetura.md and docs/spec/zvtakum.adoc.
 #ifndef ZT_MACHINE_HPP
 #define ZT_MACHINE_HPP
 
@@ -9,21 +12,21 @@
 
 namespace zt {
 
-// Contadores do perímetro medido. Todo o código do programa executa no simulador,
-// inclusive laços, endereços e vsetvli. Escritas implícitas de vl e vtype contam
-// como escritas de CSR.
+// Counters for the measured perimeter. The program, loops, addresses, and
+// vsetvli all execute in the simulator; implicit vl/vtype writes count as CSR
+// writes so kernels can be compared by the same accounting rule.
 struct Counters {
-    uint64_t insn_total = 0;
-    uint64_t insn_scalar = 0;
-    uint64_t insn_vsetvl = 0;
-    uint64_t insn_vector = 0;
-    uint64_t insn_zvtakum = 0;
-    uint64_t csr_reads = 0;
-    uint64_t csr_writes = 0;
-    uint64_t elem_active = 0;
-    uint64_t bytes_loaded = 0;
-    uint64_t bytes_stored = 0;
-    uint64_t index_bytes_loaded = 0;
+    uint64_t insn_total = 0;       // All retired instructions.
+    uint64_t insn_scalar = 0;      // RV64I/M and system instructions.
+    uint64_t insn_vsetvl = 0;      // vsetvl/vsetvli configuration operations.
+    uint64_t insn_vector = 0;      // Standard RVV data operations.
+    uint64_t insn_zvtakum = 0;     // Experimental Takum vector operations.
+    uint64_t csr_reads = 0;        // Explicit CSR reads.
+    uint64_t csr_writes = 0;       // Explicit and implicit CSR writes.
+    uint64_t elem_active = 0;      // Active elements processed by vector ops.
+    uint64_t bytes_loaded = 0;     // Data bytes read by vector/scalar loads.
+    uint64_t bytes_stored = 0;     // Data bytes written by stores.
+    uint64_t index_bytes_loaded = 0;  // Bytes read by indexed vector loads.
 };
 
 class SimError : public std::runtime_error {
@@ -33,23 +36,30 @@ public:
 
 class Machine {
 public:
-    // vlen_bits: potência de 2 em [128, 4096]. ELEN = 64.
+    // Construct a machine with RVV VLEN in [128,4096] and ELEN=64.
+    // memory_bytes is the byte-addressable user memory; invalid accesses throw.
     Machine(unsigned vlen_bits, size_t memory_bytes);
 
-    // Carrega um executável ELF64 RISC-V (ET_EXEC, little-endian) e define o pc.
+    // Load a little-endian ELF64 RISC-V ET_EXEC image and set the entry PC.
     void load_elf(const std::vector<uint8_t>& image);
 
-    // Executa até exit ou até max_instructions. Retorna o código de saída.
+    // Execute until the guest exits or max_instructions is reached.
+    // Returns the guest exit code; illegal instructions and malformed images
+    // raise SimError instead of silently producing a result.
     int run(uint64_t max_instructions);
 
+    // Read or write an integer register; x0 is hard-wired to zero.
     uint64_t reg(unsigned r) const { return r == 0 ? 0 : x_[r]; }
     void set_reg(unsigned r, uint64_t value) { if (r != 0) x_[r] = value; }
+    // Program counter accessors used by tests and ELF loading.
     uint64_t pc() const { return pc_; }
     void set_pc(uint64_t value) { pc_ = value; }
 
+    // Guest memory access; references remain valid until the machine is resized.
     std::vector<uint8_t>& memory() { return mem_; }
     const std::vector<uint8_t>& memory() const { return mem_; }
 
+    // RVV state visible to tests and counter/reporting code.
     uint64_t vl() const { return vl_; }
     uint64_t vtype() const { return vtype_; }
     unsigned vlenb() const { return vlenb_; }
@@ -57,7 +67,8 @@ public:
     const std::string& stdout_bytes() const { return stdout_; }
     const Counters& counters() const { return cnt_; }
 
-    // Acesso direto ao banco vetorial para testes.
+    // Direct vector-register access for golden tests. The caller must use a
+    // valid register number and respect the configured vlenb.
     uint8_t* vreg(unsigned r) { return &vrf_[static_cast<size_t>(r) * vlenb_]; }
 
 private:

@@ -1,3 +1,8 @@
+// Functional RV64IM + Zicsr + RVV subset + Zvtakum machine.
+// The file is organized as: ELF/memory and run loop; scalar/system/CSR
+// execution; vector state and vsetvl; vector arithmetic and memory; finally
+// the five custom-0 Takum operations. Unsupported encodings throw SimError.
+// See docs/arquitetura.md and docs/spec/zvtakum.adoc.
 #include "zt/machine.hpp"
 
 #include <cstdio>
@@ -170,6 +175,9 @@ void Machine::step() {
 // ---------------------------------------------------------------- escalar
 
 void Machine::exec_scalar(uint32_t w) {
+    // RV64I/M integer instructions and branches.  This path intentionally
+    // excludes compressed and privileged instructions; rejecting them keeps
+    // the user-mode measurement perimeter explicit.
     ++cnt_.insn_scalar;
     const uint32_t op = w & 0x7f;
     const unsigned rd = (w >> 7) & 31;
@@ -405,6 +413,9 @@ void Machine::exec_scalar(uint32_t w) {
 }
 
 void Machine::exec_system(uint32_t w) {
+    // System instructions implement the user-mode exit/write ABI and CSR
+    // boundary. Privileged traps and unrecognized system funct3 values are
+    // illegal for this functional model.
     ++cnt_.insn_scalar;
     const unsigned f3 = (w >> 12) & 7;
     if (f3 == 0) {
@@ -432,6 +443,8 @@ void Machine::exec_system(uint32_t w) {
 }
 
 void Machine::exec_csr(uint32_t w) {
+    // Zicsr reads/writes the modeled vector CSRs. Reads and writes are counted
+    // separately, including the implicit vl/vtype writes from vsetvl.
     const unsigned rd = (w >> 7) & 31;
     const unsigned f3 = (w >> 12) & 7;
     const unsigned rs1 = (w >> 15) & 31;
@@ -560,6 +573,10 @@ void Machine::vsetvl_common(unsigned rd, uint64_t avl, bool rs1_is_x0, bool rd_i
 // --------------------------------------------------------- vetorial: operações
 
 void Machine::exec_opv(uint32_t w) {
+    // Standard RVV arithmetic supported by the kernels: FP32 multiply,
+    // reduction, and the integer/index operations needed by strip-mining.
+    // Tail and mask agnostic policies are applied by fill_ones; unsupported
+    // SEW/LMUL combinations throw rather than falling back silently.
     const unsigned f3 = (w >> 12) & 7;
     const unsigned rd = (w >> 7) & 31;
     const unsigned rs1 = (w >> 15) & 31;
@@ -663,6 +680,8 @@ void Machine::exec_opv(uint32_t w) {
 }
 
 void Machine::exec_vload(uint32_t w) {
+    // Unit-stride and indexed loads follow RVV masking, vl, vstart, and
+    // element-width rules. Misaligned or out-of-range accesses are errors.
     ++cnt_.insn_vector;
     require_vtype_legal();
     const unsigned f3 = (w >> 12) & 7;
@@ -731,6 +750,8 @@ void Machine::exec_vload(uint32_t w) {
 }
 
 void Machine::exec_vstore(uint32_t w) {
+    // Stores use the same active-element and mask rules as loads. There is no
+    // cache or fault-restart model in this user-mode simulator.
     ++cnt_.insn_vector;
     require_vtype_legal();
     const unsigned f3 = (w >> 12) & 7;
@@ -762,6 +783,10 @@ void Machine::exec_vstore(uint32_t w) {
 }
 
 void Machine::exec_zvtakum(uint32_t w) {
+    // Zvtakum custom-0 operations: vtadd, vtsub, vtmul, vtdot, and vncvt.
+    // They use the Takum core's NaR/zero/saturation semantics, obey RVV tail
+    // and mask agnostic behavior, and reject illegal SEW, vstart, or register
+    // group encodings with an explicit illegal-instruction error.
     ++cnt_.insn_zvtakum;
     require_vtype_legal();
     const unsigned f3 = (w >> 12) & 7;

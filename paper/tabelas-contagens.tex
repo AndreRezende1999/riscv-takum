@@ -1,27 +1,27 @@
 \begin{table*}[t]
-\caption{Instruções, instruções Zvtakum, escritas de CSR e elementos ativos por elemento não nulo, somados sobre as oito matrizes. Elementos ativos contam cada elemento processado por instruções vetoriais de dados (carga, gather, produto, redução e armazenamento).}
+\caption{Instructions, Zvtakum instructions, CSR writes, and active elements per nonzero, summed over the eight matrices. Active elements count each item processed by vector data instructions (load, gather, product, reduction, store).}
 \label{tab:contagens}
 \centering
 \footnotesize
 \begin{tabular}{@{}llcccc@{}}
 \toprule
-Formato & VLEN & Instr./nnz & Zvtakum/nnz & Escritas CSR/nnz & Elem. ativos/nnz \\
+Format & VLEN & Instr./nnz & Zvtakum/nnz & CSR writes/nnz & Active elem./nnz \\
 \midrule
-FP32 & 128 & 6{,}140 & 0{,}000 & 1{,}328 & 5{,}334 \\
-FP32 & 256 & 4{,}587 & 0{,}000 & 1{,}069 & 5{,}334 \\
-FP32 & 512 & 4{,}343 & 0{,}000 & 1{,}029 & 5{,}334 \\
+FP32 & 128 & 6.140 & 0.000 & 1.328 & 5.334 \\
+FP32 & 256 & 4.587 & 0.000 & 1.069 & 5.334 \\
+FP32 & 512 & 4.343 & 0.000 & 1.029 & 5.334 \\
 \midrule
-Takum32 & 128 & 5{,}977 & 0{,}497 & 1{,}328 & 4{,}501 \\
-Takum32 & 256 & 4{,}553 & 0{,}368 & 1{,}069 & 4{,}501 \\
-Takum32 & 512 & 4{,}329 & 0{,}347 & 1{,}029 & 4{,}501 \\
+Takum32 & 128 & 5.977 & 0.497 & 1.328 & 4.501 \\
+Takum32 & 256 & 4.553 & 0.368 & 1.069 & 4.501 \\
+Takum32 & 512 & 4.329 & 0.347 & 1.029 & 4.501 \\
 \midrule
-Takum16 & 128 & 4{,}954 & 0{,}368 & 1{,}470 & 4{,}501 \\
-Takum16 & 256 & 4{,}690 & 0{,}347 & 1{,}389 & 4{,}501 \\
-Takum16 & 512 & 4{,}605 & 0{,}341 & 1{,}363 & 4{,}501 \\
+Takum16 & 128 & 4.954 & 0.368 & 1.470 & 4.501 \\
+Takum16 & 256 & 4.690 & 0.347 & 1.389 & 4.501 \\
+Takum16 & 512 & 4.605 & 0.341 & 1.363 & 4.501 \\
 \midrule
-Takum8 & 128 & 4{,}510 & 0{,}347 & 1{,}389 & 4{,}501 \\
-Takum8 & 256 & 4{,}431 & 0{,}341 & 1{,}363 & 4{,}501 \\
-Takum8 & 512 & 4{,}392 & 0{,}337 & 1{,}350 & 4{,}501 \\
+Takum8 & 128 & 4.510 & 0.347 & 1.389 & 4.501 \\
+Takum8 & 256 & 4.431 & 0.341 & 1.363 & 4.501 \\
+Takum8 & 512 & 4.392 & 0.337 & 1.350 & 4.501 \\
 \bottomrule
 \end{tabular}
 \end{table*}

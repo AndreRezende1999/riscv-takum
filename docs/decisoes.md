@@ -13,10 +13,10 @@ foi feito nesta branch (`refactor/zvtakum-cpp`).
 
 ## D2 — Linguagem do simulador
 
-* **Status:** adotada para o simulador novo (C++17). O código C11 anterior (`src/`, `include/`, `tests/`, `tools/`, `bench/`) permanece no repositório como referência histórica.
-* **Contexto:** o enunciado cita simulador em C++ ou Python. A implementação C11 é um desvio que precisava ser confirmado com o docente.
+* **Status:** adotada para o simulador novo (C++17). O código C11 anterior (`src/`, `include/`, `tests/`, `tools/`, `bench/`) foi removido; sua história permanece no git.
+* **Contexto:** o item 2 dos Objetivos aceita C++ ou Python. C++17 atende explicitamente ao enunciado.
 * **Motivação:** o núcleo Takum e o interpretador ficam mais claros e mais rápidos em C++; a escala do experimento (matrizes × formatos × VLEN) exige código compilado.
-* **Pendente:** confirmar com o docente que C++17 atende o enunciado.
+* **Pendente:** nenhuma.
 
 ## D3 — Papéis dos modelos
 
@@ -54,7 +54,7 @@ foi feito nesta branch (`refactor/zvtakum-cpp`).
 
 * **Status:** parcialmente adotada.
 * **Decisão:** FP32 como kernel vetorial real (`vfmul` e `vfredusum`). Takum T8, T16 e T32 como kernels reais. FP8 (E4M3, E5M2) e FP16 apenas por modelo numérico (`kernels/numeric_baselines.py`), sem contagem de instruções.
-* **Pendente:** kernel FP16 com Zvfh e widening para FP32; BF16 opcional.
+* **Pendente:** não implementar Zvfh nesta fase. Se houver tempo, alterar `sim/src/machine.cpp` para executar FP16 e widening para FP32, adicionar as instruções e casos de teste correspondentes em `sim/kernels/` e atualizar os contadores; estimativa de esforço: uma mudança de semântica no simulador, um kernel e uma rodada de validação diferencial.
 
 ## D9 — Oráculo para instruções padrão
 

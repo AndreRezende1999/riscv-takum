@@ -1,14 +1,14 @@
-"""Gera as tabelas e os números citados no artigo a partir de sim/results/.
+"""Generate paper tables and macros from the reproducible result CSVs.
 
-Saídas (incluídas por paper/main.tex):
+Outputs included by paper/main.tex:
   paper/tabelas-precisao32.tex   erro por matriz em 32 bits, com controles de acumulação;
   paper/tabelas-precisao816.tex  erro por matriz em 8 e 16 bits;
   paper/tabelas-contagens.tex    instruções e escritas de CSR por não nulo;
   paper/tabela-modelo.tex        parâmetros do modelo de contagem N = rR + cS + K;
   paper/numeros.tex              macros \\Num..., \\Par..., \\Rel... citadas no texto.
 
-Comparações entre formatos são pareadas (mesma matriz); nenhuma mediana de conjuntos
-diferentes é comparada diretamente.
+Format comparisons are paired by matrix; medians from different sets are never
+compared directly.
 
     python3 paper/gera_tabelas.py
 """
@@ -21,7 +21,9 @@ import statistics as st
 from collections import defaultdict
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-RES = ROOT / "sim" / "results"
+RES = ROOT / "results"
+if not RES.exists():
+    RES = ROOT / "sim" / "results"
 PAPER = ROOT / "paper"
 SPMV = RES / "spmv_hb.csv"
 NUMERIC = RES / "spmv_numerico_hb.csv"
@@ -38,7 +40,7 @@ def load(path: pathlib.Path) -> list[dict]:
 
 
 def comma(text: str) -> str:
-    return text.replace(".", "{,}")
+    return text.replace(",", ".")
 
 
 def sci(value: float) -> str:
@@ -107,11 +109,11 @@ def tabela_precisao32(spmv: dict, numeric: dict, matrices: list[str]) -> str:
               "Mediana & & " + " & ".join(sci(st.median(cols[k])) for k in
                                           ("fp32", "takum32", "b64", "t32a32")) + " \\\\"]
     return table_star(
-        "Erro relativo L2 do SpMV em 32 bits (VLEN = 256), por matriz. A coluna FP32 é o kernel "
-        "vetorial (acumulador de 32 bits); as colunas de controle usam o modelo numérico com o "
-        "acumulador indicado.",
+        "Relative L2 SpMV error at 32 bits (VLEN = 256), by matrix. FP32 is the "
+        "vector kernel (32-bit accumulator); controls use the numerical model with "
+        "the indicated accumulator.",
         "tab:precisao32", "@{}lrcccc@{}",
-        ["Matriz", "nnz", "FP32", "Takum32", "FP32 (acum.\\ 64)", "Takum32 (acum.\\ 32)"],
+        ["Matrix", "nnz", "FP32", "Takum32", "FP32 (64-bit acc.)", "Takum32 (32-bit acc.)"],
         body, footer)
 
 
@@ -123,10 +125,11 @@ def tabela_precisao816(spmv: dict, numeric: dict, matrices: list[str]) -> str:
             f"{cell(numeric[(m, 'binary16')])} & {cell(spmv[(m, 'takum16', VLEN_REF)])} & "
             f"{cell(spmv[(m, 'takum8', VLEN_REF)])} \\\\")
     return table_star(
-        "Erro relativo L2 em 8 e 16 bits, por matriz (VLEN = 256). NF($k$) indica $k$ linhas não "
-        "finitas (overflow). Acumuladores: E4M3, E5M2 e Takum8 em 16 bits; FP16 e Takum16 em 32 bits.",
+        "Relative L2 error at 8 and 16 bits, by matrix (VLEN = 256). NF($k$) "
+        "denotes $k$ non-finite rows (overflow). Accumulators: E4M3, E5M2 and "
+        "Takum8 at 16 bits; FP16 and Takum16 at 32 bits.",
         "tab:precisao816", "@{}lccccc@{}",
-        ["Matriz", "E4M3", "E5M2", "FP16", "Takum16", "Takum8"],
+        ["Matrix", "E4M3", "E5M2", "FP16", "Takum16", "Takum8"],
         body, [])
 
 
@@ -149,11 +152,11 @@ def tabela_contagens(spmv_rows: list[dict]) -> str:
         body.append("\\midrule")
     body = body[:-1]
     return table_star(
-        "Instruções, instruções Zvtakum, escritas de CSR e elementos ativos por elemento não nulo, "
-        "somados sobre as oito matrizes. Elementos ativos contam cada elemento processado por "
-        "instruções vetoriais de dados (carga, gather, produto, redução e armazenamento).",
+        "Instructions, Zvtakum instructions, CSR writes, and active elements per "
+        "nonzero, summed over the eight matrices. Active elements count each item "
+        "processed by vector data instructions (load, gather, product, reduction, store).",
         "tab:contagens", "@{}llcccc@{}",
-        ["Formato", "VLEN", "Instr./nnz", "Zvtakum/nnz", "Escritas CSR/nnz", "Elem. ativos/nnz"],
+        ["Format", "VLEN", "Instr./nnz", "Zvtakum/nnz", "CSR writes/nnz", "Active elem./nnz"],
         body, [])
 
 
@@ -175,7 +178,7 @@ def tabela_modelo(model_rows: list[dict]) -> str:
         "\\footnotesize",
         "\\begin{tabular}{@{}lcccrr@{}}",
         "\\toprule",
-        "Formato & $r$ & $c$ & $K$ & Sintéticos & Reais exatas \\\\",
+        "Format & $r$ & $c$ & $K$ & Synthetic & Exact runs \\\\",
         "\\midrule",
         *body,
         "\\bottomrule",

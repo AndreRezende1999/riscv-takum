@@ -23,6 +23,7 @@ spmv: sim
 
 paper-data:
 	$(PYTHON) paper/gera_tabelas.py
+	$(PYTHON) paper/gera_figuras.py
 
 paper:
 	cd paper && latexmk -pdf -interaction=nonstopmode main.tex
